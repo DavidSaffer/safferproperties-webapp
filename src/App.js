@@ -5,16 +5,21 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import your custom components
-import HomePage from './components/HomePage';
-import AboutPage from './components/AboutPage';
+import Navbar from './components/Navbar';
+import Home from './components/HomePage';
+import About from './components/AboutPage';
 
 function App() {
   return (
     <Router>
+      < Navbar/>
       <div>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/" exact component={Home} />
+          <Route path="/about" component={About} />
+          {/* <Route path="/properties" component={Properties} />
+          <Route path="/rental-application" component={RentalApplication} />
+          <Route path="/contact" component={Contact} /> */}
         </Routes>
       </div>
     </Router>
