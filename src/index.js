@@ -14,6 +14,11 @@ import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
+// User auth
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { AuthProvider } from './AuthContext.js';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -28,15 +33,19 @@ const firebaseConfig = {
 
 
 // Initialize Firebase
-
 const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
 const analytics = getAnalytics(firebase);
 
+// User Auth
+const auth = getAuth(firebase);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );
 
@@ -45,4 +54,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export {firebase, database, analytics};
+export {firebase, database, analytics, auth};

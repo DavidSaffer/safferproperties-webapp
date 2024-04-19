@@ -1,25 +1,53 @@
 .navbar {
-    background-color: #333;
-    padding: 10px 0;
-  }
-  
-  .navbar-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  
-  .navbar-item {
-    margin-right: 20px;
-  }
-  
-  .navbar-link {
-    color: #fff;
-    text-decoration: none;
-  }
-  
-  .navbar-link:hover {
-    text-decoration: underline;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 10px 20px;
+}
+
+.navbar-list {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  margin-right: 20px;
+}
+
+.navbar-item:last-child {
+  margin-right: 0;
+}
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-link:hover {
+  text-decoration: underline;
+}
+
+.auth-links {
+  margin-left: auto; /* Pushes the authentication links to the right */
+}
+
+/* Targeting only the login button for black text color */
+.auth-links .navbar-item button.navbar-link {
+  color: #000; /* Black color for login button text */
+}
+
+.admin-status {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.admin {
+  color: green;
+}
+
+.not-admin {
+  color: red;
+}

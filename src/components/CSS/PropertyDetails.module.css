@@ -9,7 +9,7 @@
   
   .imageGallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr)); /* Adjust min size for more images per row */
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); /* Adjust min size for more images per row */
     grid-gap: 10px;
     max-width: 70%;
   }
