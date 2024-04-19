@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
+import { getDatabase } from "firebase/database";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -29,6 +30,7 @@ const firebaseConfig = {
 // Initialize Firebase
 
 const firebase = initializeApp(firebaseConfig);
+const database = getDatabase(firebase);
 const analytics = getAnalytics(firebase);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -43,4 +45,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export default firebase;
+export {firebase, database, analytics};

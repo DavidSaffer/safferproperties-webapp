@@ -10,6 +10,7 @@ import About from './components/AboutPage';
 import Properties from './components/PropertiesPage';
 import RentalApplication from './components/RentalAppPage';
 import Contact from './components/ContactPage';
+import PropertyDetail from './components/PropertyDetail';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/properties" element={<Properties />} />
             <Route path="/rental-application" element={<RentalApplication />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/properties/:id" element={<PropertyDetail />} />
           </Routes>
         </Router>
       </div>
