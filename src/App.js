@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
@@ -16,7 +15,6 @@ import Contact from './components/ContactPage';
 function App() {
   return (
     <>
-    <h1>App</h1>
       <div>
         <Router>
           <Navbar />
