@@ -8,21 +8,28 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/HomePage';
 import About from './components/AboutPage';
+import Properties from './components/PropertiesPage';
+import RentalApplication from './components/RentalAppPage';
+import Contact from './components/ContactPage';
+
 
 function App() {
   return (
-    <Router>
-      < Navbar/>
+    <>
+    <h1>App</h1>
       <div>
-        <Routes>
-          <Route path="/" exact component={Home} />
-          <Route path="/about" component={About} />
-          {/* <Route path="/properties" component={Properties} />
-          <Route path="/rental-application" component={RentalApplication} />
-          <Route path="/contact" component={Contact} /> */}
-        </Routes>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/properties" element={<Properties />} />
+            <Route path="/rental-application" element={<RentalApplication />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Router>
       </div>
-    </Router>
+    </>
   );
 }
 
