@@ -38,6 +38,7 @@ const Navbar = () => {
         <li className="navbar-item"><Link to="/about" className="navbar-link">About</Link></li>
         <li className="navbar-item"><Link to="/rental-application" className="navbar-link">Rental Application</Link></li>
         <li className="navbar-item"><Link to="/contact" className="navbar-link">Contact</Link></li>
+        {isAdmin && <li className="navbar-item"><Link to="/addproperty" className="navbar-link">Add Property</Link></li>}
       </ul>
       {user ? (
         <ul className="navbar-list auth-links">

@@ -9,6 +9,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -36,6 +37,7 @@ const firebaseConfig = {
 const firebase = initializeApp(firebaseConfig);
 const database = getDatabase(firebase);
 const analytics = getAnalytics(firebase);
+const storage = getStorage(firebase);
 
 // User Auth
 const auth = getAuth(firebase);
@@ -54,4 +56,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export {firebase, database, analytics, auth};
+export {firebase, database, analytics, auth, storage};

@@ -12,6 +12,9 @@ import RentalApplication from './components/RentalAppPage';
 import Contact from './components/ContactPage';
 import PropertyDetail from './components/PropertyDetail';
 
+//Admin
+import AddProperty from './components/AdminComponents/AddPropertyPage.js';
+
 
 // User Auth
 // import { auth } from './index';
@@ -27,24 +30,6 @@ function App() {
   const {isAdmin} = useAuth();
   console.log("isAdmin:", isAdmin);
 
-  // const [user] = useAuthState(auth);
-  // console.log("User:", user);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     const adminRef = ref(database, 'admins/' + user.uid);
-  //     get(adminRef).then(snapshot => {
-  //       if (snapshot.exists()) {
-  //         console.log("User is an admin");
-  //       } else {
-  //         console.log("User is not an admin");
-  //       }
-  //     }).catch(error => {
-  //       console.error("Failed to check admin status:", error);
-  //     });
-  //   }
-  // }, [user]);  // Only rerun the effect if user changes
-
   return (
     <>
       <div>
@@ -57,6 +42,7 @@ function App() {
             <Route path="/rental-application" element={<RentalApplication />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
+            {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
           </Routes>
         </Router>
       </div>
