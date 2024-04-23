@@ -50,3 +50,12 @@
     }
   }
   
+
+  .my-custom-lightbox .ril__toolbar  {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+:global(.ril__toolbar) {
+  background-color: rgba(0, 0, 0, 0) !important;
+}

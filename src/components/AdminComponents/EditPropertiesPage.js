@@ -25,7 +25,7 @@ function EditPropertiesPage() {
   }, []);
 
   const filteredProperties = filterAvailable
-    ? properties.filter(property => property.currentley_available)
+    ? properties.filter(property => property.currently_available)
     : properties;
 
     return (
@@ -48,8 +48,8 @@ function EditPropertiesPage() {
                 <img src={property.thumbnail_image_url} alt="Thumbnail" />
                 <div className={styles.propertyCardContent}>
                   <h2>{property.address}</h2>
-                  <p>{property.description}</p>
-                  <p>${property.price}</p>
+                  <p>{property.bedrooms} Bedrooms | {property.bathrooms} Bathrooms</p>
+                  <p>{property.thumbnail_description}</p>
                 </div>
               </Link>
             </li>

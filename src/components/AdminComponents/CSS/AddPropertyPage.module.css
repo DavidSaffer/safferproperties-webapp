@@ -72,3 +72,30 @@
     margin-top: 15px;
   }
   
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #09f;
+    animation: spin 1s linear infinite;
+  }
+  
+
+  .image {
+    width: 100%;  /* existing styles */
+    height: auto;  /* existing styles */
+    object-fit: cover;  /* existing styles */
+    cursor: grab;  /* changes cursor to a grabbing hand when hovering */
+}
+
+/* It's also a good idea to indicate cursor change when dragging */
+.image:active {
+    cursor: grabbing;
+}

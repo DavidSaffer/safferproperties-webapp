@@ -5,33 +5,38 @@ import { storage, database } from '../../index.js'; // Adjust import paths based
 import styles from './CSS/AddPropertyPage.module.css';
 
 import {
-    DndContext,
-    closestCenter,
-    KeyboardSensor,
-    PointerSensor,
-    useSensor,
-    useSensors,
-    MouseSensor 
-  } from '@dnd-kit/core';
-  import {
-    arrayMove,
-    SortableContext,
-    verticalListSortingStrategy,
-    sortableKeyboardCoordinates,
-  } from '@dnd-kit/sortable';
-  
-  // Assuming SortableItem is correctly defined and exported in SortableItemComponent.js
-  import { SortableItem } from '../SortableItemComponent';
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  MouseSensor 
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
+
+// Assuming SortableItem is correctly defined and exported in SortableItemComponent.js
+import { SortableItem } from '../SortableItemComponent';
 
 const AddPropertyForm = () => {
+  const [submitting, setSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     address: '',
     bedrooms: '',
     bathrooms: '',
     description: '',
     images: [],
-    currentleyAvailable: false
-  });
+    currentlyAvailable: false,
+    price: '',
+    thumbnailDescription: '',
+    propertyType: 'Residential', // Default to Residential
+  });  
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -63,6 +68,13 @@ const AddPropertyForm = () => {
     });
   };
 
+  const removeImage = (index) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      images: prevFormData.images.filter((_, i) => i !== index)
+    }));
+  };
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over.id) {
@@ -80,49 +92,56 @@ const AddPropertyForm = () => {
       bathrooms: '',
       description: '',
       images: [],
-      currentleyAvailable: false
+      currentlyAvailable: false,
+      price: '',
+      thumbnailDescription: '',
     });
   };
 
   const addProperty = async () => {
-    const { address, bedrooms, bathrooms, description, images } = formData;
+    setSubmitting(true); // Start submission and show animation
+    const { address, bedrooms, bathrooms, description, images, price, thumbnailDescription, propertyType } = formData;
     const newPropertyRef = push(databaseRef(database, 'properties'));
     const imagesUrls = await Promise.all(
       images.map(async (image, index) => {
         const blob = await fetch(image).then(r => r.blob());
         const timestamp = new Date().getTime();
-        const fileName = `image_${timestamp}_${index}.jpg`; // Assuming JPEGs, adjust accordingly
+        const fileName = `image_${timestamp}_${index}.jpg`;
         const imageRef = storageRef(storage, `properties/${newPropertyRef.key}/${fileName}`);
         const snapshot = await uploadBytes(imageRef, blob);
         return getDownloadURL(snapshot.ref);
       })
-    );
-
+    ).catch(error => {
+      console.error('Error uploading images:', error);
+      setSubmitting(false); // Stop the animation and enable the button on error
+      return []; // Return empty array to prevent further errors
+    });
+  
     const propertyData = {
-      address,
-      bedrooms,
-      bathrooms,
-      description,
-      image_urls: imagesUrls,
-      currentley_available: formData.currentleyAvailable,
-      thumbnail_image_url: imagesUrls[0] // Assuming the first image is the thumbnail
+      address, bedrooms, bathrooms, description, image_urls: imagesUrls,
+      currently_available: formData.currentlyAvailable, price, thumbnail_image_url: imagesUrls[0],
+      thumbnail_description: thumbnailDescription, property_type: propertyType,
     };
-
+  
     set(newPropertyRef, propertyData)
       .then(() => {
         alert('Property added successfully!');
         clearForm();
+        setSubmitting(false); // Stop the animation and enable the button
       })
       .catch((error) => {
         console.error('Error adding property:', error);
+        setSubmitting(false); // Stop the animation and enable the button
       });
   };
+  
+  
 
   return (
     <div className={styles.formContainer}>
       <h1>Add New Property</h1>
       <form>
-      <label className={styles.label}>
+        <label className={styles.label}>
           Address:
           <input type="text" name="address" value={formData.address} onChange={handleInputChange} className={styles.input} />
         </label>
@@ -139,28 +158,51 @@ const AddPropertyForm = () => {
           <textarea name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea}></textarea>
         </label>
         <label className={styles.label}>
-            Currently Available:
-            <input
-                type="checkbox"
-                name="currentlyAvailable"
-                checked={formData.currentlyAvailable}
-                onChange={e => setFormData({ ...formData, currentlyAvailable: e.target.checked })}
-                className={styles.checkbox}
-            />
+          Price:
+          <input type="text" name="price" value={formData.price} onChange={handleInputChange} className={styles.input} />
         </label>
         <label className={styles.label}>
-          Upload Images:
+          Thumbnail Description:
+          <textarea name="thumbnailDescription" value={formData.thumbnailDescription} onChange={handleInputChange} className={styles.textarea}></textarea>
+        </label>
+        <label className={styles.label}>
+          Currently Available:
+          <input
+              type="checkbox"
+              name="currentlyAvailable"
+              checked={formData.currentlyAvailable}
+              onChange={e => setFormData({ ...formData, currentlyAvailable: e.target.checked })}
+              className={styles.checkbox}
+          />
+        </label>
+        
+        <label className={styles.label}>
+            Property Type:
+            <select name="propertyType" value={formData.propertyType} onChange={handleInputChange} className={styles.select}>
+              <option value="Residential">Residential</option>
+              <option value="Commercial">Commercial</option>
+            </select>
+          </label>
+
+          <label className={styles.label}>
+          Add Images: 
           <input type="file" multiple onChange={handleImageUpload} className={styles.inputFile} accept="image/*" />
         </label>
+
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={formData.images} strategy={verticalListSortingStrategy}>
             {formData.images.map((src, index) => (
-              <SortableItem key={index} id={index} src={src} />
+              <SortableItem key={index} id={index} src={src} onRemove={() => removeImage(index)} />
             ))}
           </SortableContext>
         </DndContext>
         <div>
-          <button type="button" onClick={addProperty} className={styles.button}>Add Property</button>
+
+        <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
+          {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
+        </button>
+
+
           <button type="button" onClick={clearForm} className={styles.button}>Clear</button>
         </div>
       </form>
