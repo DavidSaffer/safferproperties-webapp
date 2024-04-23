@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../index.js'; 
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import { useAuth } from '../AuthContext.js';
-
 import './CSS/Navbar.css'; // Import CSS file for styling
 
 const Navbar = () => {
@@ -20,26 +19,60 @@ const Navbar = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access Google APIs.
         console.log(result);
-        // Optional: navigate to the home page or another page on successful login
       })
       .catch((error) => {
-        // Handle Errors here.
         console.error('Error logging in with Google', error);
       });
   };
 
+  const linkStyle = ({ isActive }) => ({
+    color: isActive ? '#ffcc00' : '#fff', // Change color to yellow when active
+    //textShadow: isActive ? '0 0 4px #ffcc00' : 'none' // Optional: add shadow for emphasis
+  });
+
   return (
     <nav className="navbar">
       <ul className="navbar-list">
-        <li className="navbar-item"><Link to="/" className="navbar-link">Home</Link></li>
-        <li className="navbar-item"><Link to="/properties" className="navbar-link">Properties</Link></li>
-        <li className="navbar-item"><Link to="/about" className="navbar-link">About</Link></li>
-        <li className="navbar-item"><Link to="/rental-application" className="navbar-link">Rental Application</Link></li>
-        <li className="navbar-item"><Link to="/contact" className="navbar-link">Contact</Link></li>
-        {isAdmin && <li className="navbar-item"><Link to="/addproperty" className="navbar-link">Add Property</Link></li>}
-        {isAdmin && <li className="navbar-item"><Link to="/editproperties" className="navbar-link">Edit Property</Link></li>}
+        <li className="navbar-item">
+          <NavLink to="/" className="navbar-link" end style={linkStyle}>
+            Home
+          </NavLink>
+        </li>
+        <li className="navbar-item">
+          <NavLink to="/properties" className="navbar-link" style={linkStyle}>
+            Properties
+          </NavLink>
+        </li>
+        <li className="navbar-item">
+          <NavLink to="/about" className="navbar-link" style={linkStyle}>
+            About
+          </NavLink>
+        </li>
+        <li className="navbar-item">
+          <NavLink to="/rental-application" className="navbar-link" style={linkStyle}>
+            Rental Application
+          </NavLink>
+        </li>
+        <li className="navbar-item">
+          <NavLink to="/contact" className="navbar-link" style={linkStyle}>
+            Contact
+          </NavLink>
+        </li>
+        {isAdmin && (
+          <li className="navbar-item">
+            <NavLink to="/addproperty" className="navbar-link" style={linkStyle}>
+              Add Property
+            </NavLink>
+          </li>
+        )}
+        {isAdmin && (
+          <li className="navbar-item">
+            <NavLink to="/editproperties" className="navbar-link" style={linkStyle}>
+              Edit Properties
+            </NavLink>
+          </li>
+        )}
       </ul>
       {user ? (
         <ul className="navbar-list auth-links">
@@ -59,6 +92,5 @@ const Navbar = () => {
     </nav>
   );
 };
-
 
 export default Navbar;

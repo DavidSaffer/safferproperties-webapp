@@ -51,3 +51,8 @@
 .not-admin {
   color: red;
 }
+
+.active-link {
+  color: #ffcc00; /* Change this color to match your theme */
+  font-weight: bold;
+}
