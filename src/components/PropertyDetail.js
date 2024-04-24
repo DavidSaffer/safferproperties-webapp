@@ -28,6 +28,8 @@ function PropertyDetail() {
     });
   }, [id]);
 
+  console.log("image urls", property?.image_urls);
+
   // Convert the description into a list
   const getDescriptionList = (description) => {
     return description.split('..').map((item, index) => (

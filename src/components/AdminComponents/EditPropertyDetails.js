@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ref, get, child, update, remove } from "firebase/database";
+import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
+import { deleteObject } from "firebase/storage";
 import { storage, database } from '../../index.js';
 import styles from './CSS/EditPropertyDetails.module.css';
 
@@ -38,7 +40,7 @@ function EditPropertyDetails() {
     image_urls: [],
   });
   const { id } = useParams();
-
+  console.log("ID:", id);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(MouseSensor),
@@ -66,21 +68,22 @@ function EditPropertyDetails() {
       }
     }).catch((error) => {
       console.error(error);
+      Swal.fire('Error!', 'Failed to fetch property details.', 'error');
     });
   }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+    // Convert "true/false" strings to actual boolean values for "currently_available
     if (name === "currently_available") {
-      // Convert string value to boolean before setting state
-      const isAvailable = value === "true"; // This will be true if value is "true", false otherwise
+      const isAvailable = value === "true";
       setFormData(prev => ({
         ...prev,
         [name]: isAvailable
       }));
+      
+    // Handle other inputs normally
     } else {
-      // Handle other inputs normally
       setFormData(prev => ({
         ...prev,
         [name]: type === 'checkbox' ? checked : value
@@ -88,7 +91,54 @@ function EditPropertyDetails() {
     }
   };
 
-  const handleRemoveImage = (index) => {
+  // Add an image to storage, then also add the URL to the reltime databse
+  // (this way if the user dosnt hit save, the image is still saved. this prevents images in storage but not in realtime database)
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const timestamp = new Date().getTime();
+    const imageCount = formData.image_urls.length;
+    const fileName = `image_${timestamp}_${imageCount}.jpg`;
+    const newImageRef = storageRef(storage, `properties/${id}/${fileName}`);
+
+    setLoading(true);
+    try {
+      const snapshot = await uploadBytes(newImageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      if (!downloadURL) {
+          throw new Error("Failed to get download URL");
+      }
+      // Update the local state with the new image URL
+      const newImageUrls = [...formData.image_urls, downloadURL];
+      const newThumbnailUrl = newImageUrls[0];
+      setFormData(prev => ({
+        ...prev,
+        image_urls: newImageUrls,
+        thumbnail_image_url: newThumbnailUrl
+      }));
+
+      // Update the Firebase Realtime Database
+      const propertyRef = ref(database, `properties/${id}`);
+      await update(propertyRef, { image_urls: newImageUrls, thumbnail_image_url: newThumbnailUrl });
+
+      Swal.fire('Uploaded!', 'Your image has been uploaded.', 'success');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      Swal.fire('Error!', 'Failed to upload image.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveImage = async (index) => {
+    const url = formData.image_urls[index]; // Get the URL of the image to be removed
+    const decodedUrl = decodeURIComponent(url); // Decode URL to handle encoded characters
+    // Extract the file name directly from the decoded URL
+    const imagePath = decodedUrl.split('/o/')[1].split('?')[0]; // Split at '/o/' and then remove URL parameters
+
+    console.log("Decoded URL:", decodedUrl);
+    console.log("Image Name:", imagePath);
     Swal.fire({
       title: 'Are you sure?',
       text: 'This image will be removed!',
@@ -97,13 +147,26 @@ function EditPropertyDetails() {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, remove it!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          image_urls: prevFormData.image_urls.filter((_, i) => i !== index)
-        }));
-        Swal.fire('Removed!', 'The image has been removed.', 'success');
+        const imageRef = storageRef(storage, imagePath);
+        try {
+          await deleteObject(imageRef); // Use deleteObject to remove the file
+          const newImageUrls = formData.image_urls.filter((_, i) => i !== index);
+          const newThumbnailUrl = newImageUrls.length > 0 ? newImageUrls[0] : null; // Update thumbnail to the first image or null if no images left
+          setFormData(prevFormData => ({
+            ...prevFormData,
+            image_urls: newImageUrls,
+            thumbnail_image_url: newThumbnailUrl 
+          }));
+          const propertyRef = ref(database, `properties/${id}`);
+          await update(propertyRef, { image_urls: newImageUrls, thumbnail_image_url: newThumbnailUrl });
+          
+          Swal.fire('Removed!', 'The image has been removed.', 'success');
+        } catch (error) {
+          console.error('Error removing image:', error);
+          Swal.fire('Error!', 'An error occurred while deleting the image.', 'error');
+        }
       }
     });
   };
@@ -185,7 +248,7 @@ function EditPropertyDetails() {
             <option value={true}>Available</option>
             <option value={false}>Not Available</option>
           </select>
-
+          
           <label htmlFor="property_type" className={styles.label}>Property Type:</label>
           <select name="property_type" value={formData.property_type} onChange={handleInputChange} className={styles.select}>
             <option value="Residential">Residential</option>
@@ -195,12 +258,19 @@ function EditPropertyDetails() {
           <label htmlFor="thumbnail_description" className={styles.label}>Thumbnail Description:</label>
           <textarea name="thumbnail_description" value={formData.thumbnail_description} onChange={handleInputChange} className={styles.textarea}></textarea>
 
+          <div>
+            <label htmlFor="imageUpload" className={styles.label}>Upload Image:</label>
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*"/>
+          </div>
+              
+          <div>
           <button onClick={handleSave} disabled={loading} className={styles.button}>
             {loading ? 'Saving...' : 'Save'}
           </button>
           <button onClick={handleDelete} disabled={loading} className={styles.button}>
             {loading ? 'Deleting...' : 'Delete'}
           </button>
+          </div>
         </div>
       </div>
     </div>
