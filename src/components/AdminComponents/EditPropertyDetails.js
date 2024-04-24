@@ -71,10 +71,21 @@ function EditPropertyDetails() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  
+    if (name === "currently_available") {
+      // Convert string value to boolean before setting state
+      const isAvailable = value === "true"; // This will be true if value is "true", false otherwise
+      setFormData(prev => ({
+        ...prev,
+        [name]: isAvailable
+      }));
+    } else {
+      // Handle other inputs normally
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    }
   };
 
   const handleRemoveImage = (index) => {
