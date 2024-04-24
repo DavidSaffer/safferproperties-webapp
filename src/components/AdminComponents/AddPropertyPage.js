@@ -20,7 +20,6 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 
-// Assuming SortableItem is correctly defined and exported in SortableItemComponent.js
 import { SortableItem } from '../SortableItemComponent';
 
 const AddPropertyForm = () => {
@@ -184,7 +183,7 @@ const AddPropertyForm = () => {
             </select>
           </label>
 
-          <label className={styles.label}>
+        <label className={styles.label}>
           Add Images: 
           <input type="file" multiple onChange={handleImageUpload} className={styles.inputFile} accept="image/*" />
         </label>
@@ -197,13 +196,10 @@ const AddPropertyForm = () => {
           </SortableContext>
         </DndContext>
         <div>
-
-        <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
-          {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
-        </button>
-
-
-          <button type="button" onClick={clearForm} className={styles.button}>Clear</button>
+          <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
+            {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
+          </button>
+            <button type="button" onClick={clearForm} className={styles.button}>Clear</button>
         </div>
       </form>
     </div>

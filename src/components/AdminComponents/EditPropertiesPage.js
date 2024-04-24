@@ -3,7 +3,7 @@ import { ref, onValue } from "firebase/database";
 import { database } from '../../index.js';
 import { Link } from 'react-router-dom';
 
-import styles from '../CSS/PropertiesPage.module.css';
+import styles from './CSS/EditPropertiesPage.module.css';
 
 function EditPropertiesPage() {
   const [properties, setProperties] = useState([]);

@@ -9,27 +9,45 @@ export const SortableItem = ({ id, src, onRemove }) => {
     setNodeRef,
     transform,
     transition,
-    isDragging,
   } = useSortable({ id: String(id) });
 
-  // Log to check if isDragging changes as expected
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    cursor: isDragging ? 'grabbing' : 'grab', // ensure dynamic update
+  const cardStyle = {
+    background: '#fff',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+    borderRadius: '4px',
+    padding: '8px',
+    margin: '8px',
+    textAlign: 'center',
+    position: 'relative',
+    width: '95%',
+    height: 'fit-content',
+    paddingBottom: '16px',
   };
 
-  const handleRemoveClick = (event) => {
-    console.log("Remove button clicked");
-    event.preventDefault();  // Prevent form submission
-    onRemove(id);
+  const buttonStyle = {
+    marginTop: '8px',
+    color: '#fff',
+    background: '#E57373', // Softer red color
+    border: 'none',
+    borderRadius: '4px',
+    padding: '6px 12px',
+    cursor: 'pointer',
+    fontSize: '0.875rem',
+  };
+
+  const imageStyle = {
+    width: '100%',
+    height: 'auto',
+    marginBottom: '8px',
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <img src={src} alt={`Sortable thumbnail`} style={{ width: '200px', height: 'auto', marginBottom: '8px' }} />
-      <button type="button" onClick={handleRemoveClick} style={{ cursor: 'pointer' }}>Remove</button>
+    <div style={cardStyle}>
+      <div ref={setNodeRef} style={{ ...imageStyle, transform: CSS.Transform.toString(transform), transition }} {...attributes} {...listeners}>
+        <img src={src} alt={`Property`} style={imageStyle} />
+      </div>
+      <button type="button" onClick={() => onRemove(id)} style={buttonStyle}>Remove</button>
     </div>
   );
 };
+

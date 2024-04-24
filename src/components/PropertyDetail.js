@@ -32,7 +32,7 @@ function PropertyDetail() {
   const getDescriptionList = (description) => {
     return description.split('..').map((item, index) => (
       // Ensure that the item is not empty or just whitespace
-      item.trim() && <li key={index}>{item.trim()}.</li>
+      item.trim() && <li key={index}>{item.trim()}</li>
     ));
   };
 
