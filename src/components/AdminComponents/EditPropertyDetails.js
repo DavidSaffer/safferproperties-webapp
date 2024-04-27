@@ -260,7 +260,7 @@ function EditPropertyDetails() {
 
           <div>
             <label htmlFor="imageUpload" className={styles.label}>Upload Image:</label>
-            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*"/>
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} />
           </div>
               
           <div>
