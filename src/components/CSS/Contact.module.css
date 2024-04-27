@@ -1,0 +1,37 @@
+.contactContainer {
+    font-family: 'Arial', sans-serif;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+    color: #333;
+}
+
+.header {
+    color: #2A4F96;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.contactBlock {
+    margin-top: 20px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+.email, .phone {
+    color: #2A4F96;
+    text-decoration: none;
+}
+
+.email:hover, .phone:hover {
+    text-decoration: underline;
+}

@@ -50,13 +50,13 @@ const Navbar = () => {
           </NavLink>
         </li>
         <li className="navbar-item">
-          <NavLink to="/rental-application" className="navbar-link" style={linkStyle}>
-            Rental Application
+          <NavLink to="/contact" className="navbar-link" style={linkStyle}>
+            Contact
           </NavLink>
         </li>
         <li className="navbar-item">
-          <NavLink to="/contact" className="navbar-link" style={linkStyle}>
-            Contact
+          <NavLink to="/rental-application" className="navbar-link" style={linkStyle}>
+            Rental Application
           </NavLink>
         </li>
         {isAdmin && (

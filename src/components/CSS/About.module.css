@@ -1,0 +1,52 @@
+.aboutContainer {
+    font-family: 'Arial', sans-serif;
+    margin: 0 auto;
+    max-width: 960px;
+    padding: 20px;
+    color: #333;
+}
+
+.header {
+    color: #2A4F96;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.subHeader {
+    color: #2A4F96;
+    margin-top: 20px;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.serviceSection {
+    margin-top: 10px;
+}
+
+.list {
+    list-style-type: none;
+    padding-left: 20px;
+    line-height: 1.6;
+}
+
+.list li {
+    padding-bottom: 5px;
+}
+
+.list li::before {
+    content: "✔";
+    color: #2A4F96;
+    padding-right: 8px;
+}
+
+@media (max-width: 768px) {
+    .aboutContainer {
+        padding: 10px;
+    }
+
+    .header, .subHeader {
+        text-align: center;
+    }
+}
