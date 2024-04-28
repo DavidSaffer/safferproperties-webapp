@@ -42,7 +42,7 @@ function EditPropertyDetails() {
     bathrooms: '',
   });
   const { id } = useParams();
-  console.log("ID:", id);
+  
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(MouseSensor),
@@ -215,6 +215,7 @@ function EditPropertyDetails() {
     });
   };
 
+  // TODO: also delete the images from storage
   const handleDelete = async () => {
     const result = await Swal.fire({
       title: 'Are you sure?',
@@ -225,21 +226,49 @@ function EditPropertyDetails() {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
     });
-
+  
     if (result.isConfirmed) {
       setLoading(true);
       const propertyRef = ref(database, `properties/${id}`);
-      remove(propertyRef).then(() => {
-        Swal.fire('Deleted!', 'Your property has been deleted.', 'success');
-        navigate('/editproperties'); 
-      }).catch((error) => {
-        Swal.fire('Error!', 'An error occurred while deleting the property.', 'error');
-        console.error('Error deleting property:', error);
-      }).finally(() => {
+      const propertySnapshot = await get(propertyRef);
+  
+      if (propertySnapshot.exists()) {
+        const propertyData = propertySnapshot.val();
+        const imagesUrls = propertyData.image_urls || [];
+  
+        // Delete images from storage
+        await Promise.all(imagesUrls.map(async (imageUrl) => {
+          const decodedUrl = decodeURIComponent(imageUrl);
+          const imagePath = decodedUrl.split('/o/')[1].split('?')[0];
+          const imageRef = storageRef(storage, imagePath);
+          try {
+            await deleteObject(imageRef);
+          } catch (error) {
+            console.error('Error deleting image:', error);
+            // Handle error deleting image from storage
+          }
+        }));
+  
+        // Delete property from database
+        remove(propertyRef)
+          .then(() => {
+            Swal.fire('Deleted!', 'Your property has been deleted.', 'success');
+            navigate('/editproperties'); 
+          })
+          .catch((error) => {
+            Swal.fire('Error!', 'An error occurred while deleting the property.', 'error');
+            console.error('Error deleting property:', error);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      } else {
+        Swal.fire('Error!', 'Property not found.', 'error');
         setLoading(false);
-      });
+      }
     }
   };
+  
 
   return (
     <div>

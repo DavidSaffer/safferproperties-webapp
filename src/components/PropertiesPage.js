@@ -16,12 +16,12 @@ function PropertiesPage() {
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
 
   useEffect(() => {
-    console.log("Fetching data from Firebase");
+    
     const propertiesRef = ref(database, 'properties/');
-    console.log("propertiesRef:", propertiesRef); // Log the reference (optional
+    
     onValue(propertiesRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("Data retrieved from Firebase:", data); // Log the raw data
+      
       const propertyList = [];
       for (let id in data) {
         propertyList.push({ id, ...data[id] });

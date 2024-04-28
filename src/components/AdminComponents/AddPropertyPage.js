@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { ref as databaseRef, push, set } from 'firebase/database';
+import { ref as databaseRef, push, set, get } from 'firebase/database';
 import { storage, database } from '../../index.js'; // Adjust import paths based on your setup
 import styles from './CSS/AddPropertyPage.module.css';
 
@@ -101,9 +101,18 @@ const AddPropertyForm = () => {
     setSubmitting(true); // Start submission and show animation
     const { address, bedrooms, bathrooms, description, images, price, thumbnailDescription, propertyType } = formData;
 
-    const id = address.replace(/\s+/g, '-').toLowerCase(); // Convert spaces to hyphens and make lowercase
-    console.log('id:', id);
-    const newPropertyRef = push(databaseRef(database, 'properties'));
+    const name = address.replace(/\s+/g, '-').toLowerCase(); // Convert spaces to hyphens and make lowercase
+    console.log('name:', name);
+
+    // check if the name is already used
+    const snapshot = await get(databaseRef(database, `properties/${name}`));
+    if (snapshot.exists()) {
+      alert('Property with this address already exists!');
+      setSubmitting(false); // Stop the animation and enable the button
+      return;
+    }
+
+    const newPropertyRef = databaseRef(database, `properties/${name}`);
     const imagesUrls = await Promise.all(
       images.map(async (image, index) => {
         const blob = await fetch(image).then(r => r.blob());
