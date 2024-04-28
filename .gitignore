@@ -25,4 +25,4 @@ yarn-error.log*
 # firebase
 .firebase
 
-./firebaseCustomClaims/serviceAccountKey.json
+firebaseCustomClaims/serviceAccountKey.json
