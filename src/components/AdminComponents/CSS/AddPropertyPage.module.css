@@ -88,14 +88,4 @@
   }
   
 
-  .image {
-    width: 100%;  /* existing styles */
-    height: auto;  /* existing styles */
-    object-fit: cover;  /* existing styles */
-    cursor: grab;  /* changes cursor to a grabbing hand when hovering */
-}
-
-/* It's also a good idea to indicate cursor change when dragging */
-.image:active {
-    cursor: grabbing;
-}
+  

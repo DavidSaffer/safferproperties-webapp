@@ -1,6 +1,5 @@
-// PropertyDetail.jsx
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { ref, get, child } from "firebase/database";
 import { database } from '../index.js';
 import Lightbox from 'react-18-image-lightbox';
@@ -13,6 +12,7 @@ function PropertyDetail() {
   const [property, setProperty] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const detailsRef = useRef(null); // Reference to the details section
   const { id } = useParams();
 
   useEffect(() => {
@@ -27,6 +27,14 @@ function PropertyDetail() {
       console.error(error);
     });
   }, [id]);
+
+  useEffect(() => {
+    // Update max-height of details section after property data is loaded
+    if (property) {
+      const detailsHeight = detailsRef.current.scrollHeight;
+      detailsRef.current.style.maxHeight = `${detailsHeight}px`;
+    }
+  }, [property]);
 
   console.log("image urls", property?.image_urls);
 
@@ -48,7 +56,7 @@ function PropertyDetail() {
   }
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <h1>Property Details</h1>
       <div className={styles.container}>
         <div className={styles.imageGallery}>
@@ -76,11 +84,16 @@ function PropertyDetail() {
             }
           />
         )}
-        <div className={styles.details}>
+        <div ref={detailsRef} className={styles.details}>
           <h2>{property.address}</h2>
           <ul>{getDescriptionList(property.description)}</ul>
           <p>Price: ${property.price}</p>
           <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
+          {property.currently_available && ( // Check if property is available
+            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`}>
+              <button className={styles.applyButton}>Apply Now</button> {/* Apply button with styles */}
+            </Link>
+          )}
         </div>
       </div>
     </div>

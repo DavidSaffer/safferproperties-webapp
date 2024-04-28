@@ -1,0 +1,26 @@
+/* RentalApplication.module.css */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .instructions {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .link {
+    color: blue;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  

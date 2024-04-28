@@ -38,6 +38,8 @@ function EditPropertyDetails() {
     property_type: 'Residential',
     thumbnail_description: '',
     image_urls: [],
+    bedrooms: '',
+    bathrooms: '',
   });
   const { id } = useParams();
   console.log("ID:", id);
@@ -62,6 +64,8 @@ function EditPropertyDetails() {
           property_type: data.property_type || 'Residential',
           thumbnail_description: data.thumbnail_description || '',
           image_urls: data.image_urls || [],
+          bedrooms: data.bedrooms || '',
+          bathrooms: data.bathrooms || '',
         });
       } else {
         console.log("No data available");
@@ -181,6 +185,7 @@ function EditPropertyDetails() {
     }
   };
 
+
   const handleSave = async () => {
     setLoading(true);
     const propertyRef = ref(database, `properties/${id}`);
@@ -188,9 +193,25 @@ function EditPropertyDetails() {
     await update(propertyRef, formData).then(() => {
       console.log('Data updated successfully!');
       setLoading(false);
+      // Show SweetAlert success modal with animation
+      Swal.fire({
+        icon: 'success',
+        title: 'Saved!',
+        showConfirmButton: false,
+        timer: 1500,
+        willClose: () => {
+          navigate('/editproperties'); // Redirect to desired page after saving
+        }
+      });
     }).catch((error) => {
       console.error('Error updating data:', error);
       setLoading(false);
+      // Show SweetAlert error modal with animation
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to save property details.',
+      });
     });
   };
 
@@ -210,7 +231,7 @@ function EditPropertyDetails() {
       const propertyRef = ref(database, `properties/${id}`);
       remove(propertyRef).then(() => {
         Swal.fire('Deleted!', 'Your property has been deleted.', 'success');
-        navigate('/editproperties'); // Change to your actual route
+        navigate('/editproperties'); 
       }).catch((error) => {
         Swal.fire('Error!', 'An error occurred while deleting the property.', 'error');
         console.error('Error deleting property:', error);
@@ -243,6 +264,14 @@ function EditPropertyDetails() {
           <label htmlFor="price" className={styles.label}>Price:</label>
           <input type="text" name="price" value={formData.price} onChange={handleInputChange} className={styles.input} />
 
+          <div>
+            <label htmlFor="bedrooms" className={styles.label}>Bedrooms:</label>
+            <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} className={styles.input} />
+
+            <label htmlFor="bathrooms" className={styles.label}>Bathrooms:</label>
+            <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className={styles.input} />
+          </div>
+
           <label htmlFor="currently_available" className={styles.label}>Status:</label>
           <select name="currently_available" value={formData.currently_available} onChange={handleInputChange} className={styles.select}>
             <option value={true}>Available</option>
@@ -253,14 +282,15 @@ function EditPropertyDetails() {
           <select name="property_type" value={formData.property_type} onChange={handleInputChange} className={styles.select}>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
+            <option value="Vacation">Vacation</option>
           </select>
 
           <label htmlFor="thumbnail_description" className={styles.label}>Thumbnail Description:</label>
           <textarea name="thumbnail_description" value={formData.thumbnail_description} onChange={handleInputChange} className={styles.textarea}></textarea>
 
           <div>
-            <label htmlFor="imageUpload" className={styles.label}>Upload Image:</label>
-            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} />
+            <label htmlFor="imageUpload" className={styles.label}>Add Image:</label>
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*"/>
           </div>
               
           <div>

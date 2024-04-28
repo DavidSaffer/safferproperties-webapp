@@ -1,5 +1,7 @@
 import React from 'react';
 import logo from '../Assets/logo.jpg'; // Path to logo image
+import { Link } from 'react-router-dom';
+
 
 function HomePage() {
   return (
@@ -8,7 +10,9 @@ function HomePage() {
         <img src={logo} alt="Company Logo" style={styles.logo} />
         <h1>Welcome to Our Property Management Service</h1>
         <p>Explore our properties, find resources, and connect with us for all your property needs.</p>
-        <button style={styles.ctaButton}>View Properties</button>
+        <Link to="/properties?filter=available" style={{ textDecoration: 'none' }}>
+          <button style={styles.ctaButton}>Currently Available Properties</button>
+        </Link>
       </div>
       <div style={styles.featureSection}>
         <h2>Featured Properties</h2>

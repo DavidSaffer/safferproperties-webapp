@@ -100,6 +100,9 @@ const AddPropertyForm = () => {
   const addProperty = async () => {
     setSubmitting(true); // Start submission and show animation
     const { address, bedrooms, bathrooms, description, images, price, thumbnailDescription, propertyType } = formData;
+
+    const id = address.replace(/\s+/g, '-').toLowerCase(); // Convert spaces to hyphens and make lowercase
+    console.log('id:', id);
     const newPropertyRef = push(databaseRef(database, 'properties'));
     const imagesUrls = await Promise.all(
       images.map(async (image, index) => {
@@ -180,6 +183,7 @@ const AddPropertyForm = () => {
             <select name="propertyType" value={formData.propertyType} onChange={handleInputChange} className={styles.select}>
               <option value="Residential">Residential</option>
               <option value="Commercial">Commercial</option>
+              <option value="Vacation">Vacation</option>
             </select>
           </label>
 
