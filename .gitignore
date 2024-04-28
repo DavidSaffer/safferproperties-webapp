@@ -24,5 +24,7 @@ yarn-error.log*
 
 # firebase
 .firebase
-
-firebaseCustomClaims/serviceAccountKey.json
+# ignore firebase service account key
+firebaseCustomClaims/serviceAccountKey.json 
+# for saftey, ignore all json files in firebaseCustomClaims
+firebaseCustomClaims/*.json
