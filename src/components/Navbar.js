@@ -10,6 +10,8 @@ import { useAuth } from '../AuthContext.js';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import './CSS/Navbar.css'; // Import CSS file for styling
 
+import logo from '../Assets/logo5.png';
+
 const MyNavbar = () => {
   const [user] = useAuthState(auth);
   const { isAdmin } = useAuth();
@@ -34,7 +36,7 @@ const MyNavbar = () => {
     <Navbar bg="dark" variant="dark" sticky="top" expand="xl" expanded={expanded}>
       <Container fluid>
         <Navbar.Brand as={NavLink} to="/" onClick={() => setExpanded(false)}>
-          Saffer Properties
+          <img src={logo} style={{ maxWidth: '80px' }} alt="logo" />
         </Navbar.Brand>
         <Navbar.Toggle onClick={() => setExpanded(expanded => !expanded)} aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="justify-content-end">
