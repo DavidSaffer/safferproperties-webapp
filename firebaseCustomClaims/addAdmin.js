@@ -5,7 +5,7 @@ admin.initializeApp({
   databaseURL: "https://safferproperties-6bead-default-rtdb.firebaseio.com"
 })
 
-const uid = "m3pODB9tliSXWGuJWlPrhIr7RuB2"
+const uid = ""
 
 return admin
   .auth()

@@ -21,5 +21,5 @@ const checkAdminClaim = async (uid) => {
   };
   
   // Example usage:
-  checkAdminClaim('m3pODB9tliSXWGuJWlPrhIr7RuB2');  // Replace 'user-uid' with the actual UID of the user
+  checkAdminClaim('');  // Replace 'user-uid' with the actual UID of the user
   
