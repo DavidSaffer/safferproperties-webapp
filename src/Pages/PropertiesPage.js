@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from "firebase/database";
 import { database } from '../index.js';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+import PropertyCard from '../components/PropertyCard';
 
 import styles from './CSS/PropertiesPage.module.css';
 
@@ -68,16 +70,8 @@ function PropertiesPage() {
       </div>
       <ul className={styles.propertiesList}>
         {filteredProperties.map(property => (
-          <li key={property.id} className={styles.propertyCard}>
-            <Link to={`/properties/${property.id}`}>
-              <img src={property.thumbnail_image_url} alt="Thumbnail" />
-              <div className={styles.propertyCardContent}>
-                <h2>{property.address}</h2>
-                <p>{property.bedrooms} Bedrooms | {property.bathrooms} Bathrooms</p>
-                <p>{property.thumbnail_description}</p>
-                {/* <p>${property.price}</p> */}
-              </div>
-            </Link>
+          <li key={property.id}>
+            <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
           </li>
         ))}
       </ul>

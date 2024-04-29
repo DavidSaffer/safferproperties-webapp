@@ -25,7 +25,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 
-import { SortableItem } from '../SortableItemComponent';
+import { SortableItem } from '../../components/SortableItemComponent.js';
 
 function EditPropertyDetails() {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ function EditPropertyDetails() {
     bathrooms: '',
   });
   const { id } = useParams();
-  
+  console.log(id);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(MouseSensor),
@@ -200,7 +200,7 @@ function EditPropertyDetails() {
         showConfirmButton: false,
         timer: 1500,
         willClose: () => {
-          navigate('/editproperties'); // Redirect to desired page after saving
+          navigate(`/properties/${id}`); // Redirect to desired page after saving
         }
       });
     }).catch((error) => {

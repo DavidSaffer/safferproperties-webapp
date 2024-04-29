@@ -1,0 +1,26 @@
+/* PropertiesPage.module.css */
+
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.propertiesList {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+
+.propertiesList li {
+    height: 100%;
+}
+
+
+.filterSection {
+    margin-bottom: 20px;
+}

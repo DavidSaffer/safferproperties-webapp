@@ -6,17 +6,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import your custom components
 import Navbar from './components/Navbar';
-import Home from './components/HomePage';
-import About from './components/AboutPage';
-import Properties from './components/PropertiesPage';
-import RentalApplication from './components/RentalAppPage';
-import Contact from './components/ContactPage';
-import PropertyDetail from './components/PropertyDetail';
+import Home from './Pages/HomePage.js';
+import About from './Pages/AboutPage.js';
+import Properties from './Pages/PropertiesPage.js';
+import RentalApplication from './Pages/RentalAppPage.js';
+import Contact from './Pages/ContactPage.js';
+import PropertyDetail from './Pages/PropertyDetail.js';
 
 //Admin
-import AddProperty from './components/AdminComponents/AddPropertyPage.js';
-import EditProperties from './components/AdminComponents/EditPropertiesPage.js';
-import EditPropertyDetails from './components/AdminComponents/EditPropertyDetails.js';
+import AddProperty from './Pages/AdminPages/AddPropertyPage.js';
+import EditProperties from './Pages/AdminPages/EditPropertiesPage.js';
+import EditPropertyDetails from './Pages/AdminPages/EditPropertyDetails.js';
 
 // User Auth
 // import { auth } from './index';

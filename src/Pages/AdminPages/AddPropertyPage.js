@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { ref as databaseRef, push, set, get } from 'firebase/database';
+import { ref as databaseRef, set, get } from 'firebase/database';
 import { storage, database } from '../../index.js'; // Adjust import paths based on your setup
 import styles from './CSS/AddPropertyPage.module.css';
 
@@ -20,7 +20,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 
-import { SortableItem } from '../SortableItemComponent';
+import { SortableItem } from '../../components/SortableItemComponent.js';
 
 const AddPropertyForm = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -101,7 +101,7 @@ const AddPropertyForm = () => {
     setSubmitting(true); // Start submission and show animation
     const { address, bedrooms, bathrooms, description, images, price, thumbnailDescription, propertyType } = formData;
 
-    const name = address.replace(/\s+/g, '-').toLowerCase(); // Convert spaces to hyphens and make lowercase
+    const name = address.replace(/\s+/g, '-').replace(/[.#$[\]]/g, '').toLowerCase(); // Adjusted line
     console.log('name:', name);
 
     // check if the name is already used

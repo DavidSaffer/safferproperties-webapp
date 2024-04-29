@@ -40,7 +40,7 @@ function PropertyDetail() {
 
   // Convert the description into a list
   const getDescriptionList = (description) => {
-    return description.split('..').map((item, index) => (
+    return description.split(/\.+|\n+/).map((item, index) => (
       // Ensure that the item is not empty or just whitespace
       item.trim() && <li key={index}>{item.trim()}</li>
     ));
