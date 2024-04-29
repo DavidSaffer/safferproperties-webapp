@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ref as databaseRef, set, get } from 'firebase/database';
 import { storage, database } from '../../index.js'; // Adjust import paths based on your setup
@@ -48,13 +48,22 @@ const AddPropertyForm = () => {
     })
   );
 
+  useEffect(() => {
+    const savedFormData = sessionStorage.getItem('formData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData)); // Parse the JSON string back to an object
+    }
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
+    setFormData(prevFormData => {
+      const newFormData = { ...prevFormData, [name]: value };
+      sessionStorage.setItem('formData', JSON.stringify(newFormData)); // Save updated form data to session storage
+      return newFormData;
     });
   };
+  
 
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
@@ -98,6 +107,7 @@ const AddPropertyForm = () => {
       price: '',
       thumbnailDescription: '',
     });
+    sessionStorage.removeItem('formData');
   };
 
   const addProperty = async () => {
@@ -127,14 +137,30 @@ const AddPropertyForm = () => {
       })
     ).catch(error => {
       console.error('Error uploading images:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to add property. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+        footer: 'If the problem persists, show this message to david.'
+      });
       setSubmitting(false); // Stop the animation and enable the button on error
       return []; // Return empty array to prevent further errors
     });
   
+    // Check if there is at least one image URL for the thumbnail
+    const thumbnailImageUrl = imagesUrls.length > 0 ? imagesUrls[0] : null;
+
     const propertyData = {
-      address, bedrooms, bathrooms, description, image_urls: imagesUrls,
-      currently_available: formData.currentlyAvailable, price, thumbnail_image_url: imagesUrls[0],
-      thumbnail_description: thumbnailDescription, property_type: propertyType,
+      address,
+      bedrooms,
+      bathrooms,
+      description,
+      image_urls: imagesUrls,
+      currently_available: formData.currentlyAvailable,
+      price,
+      thumbnail_image_url: thumbnailImageUrl, // Use the conditional thumbnail image URL
+      thumbnail_description: thumbnailDescription,
+      property_type: propertyType,
     };
   
     set(newPropertyRef, propertyData)
@@ -154,6 +180,13 @@ const AddPropertyForm = () => {
       .catch((error) => {
         console.error('Error adding property:', error);
         setSubmitting(false); // Stop the animation and enable the button
+        // Modify the Swal call to include the error message
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `Failed to add property. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+          footer: 'If the problem persists, show this message to david.'
+        });
       });
   };
   

@@ -9,7 +9,7 @@ function RentalApplication() {
   const address = queryParams.get('address');
 
   // Construct the link address
-  const linkAddress = address ? `properties/${encodeURIComponent(address.replace(/\s+/g, '-'))}` : '';
+  //const linkAddress = address ? `properties/${encodeURIComponent(address.replace(/\s+/g, '-'))}` : '';
 
   const navigate = useNavigate();
 

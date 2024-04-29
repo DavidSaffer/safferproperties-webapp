@@ -5,15 +5,24 @@ import { database } from '../index.js';
 import Lightbox from 'react-18-image-lightbox';
 import 'react-18-image-lightbox/style.css'; 
 
+import { useAuth } from '../AuthContext.js';
+
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 import styles from './CSS/PropertyDetails.module.css';
 
 function PropertyDetail() {
   
+  const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const detailsRef = useRef(null); // Reference to the details section
   const { id } = useParams();
+
+  //const[user] = useAuthState(auth);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const propertyRef = ref(database);
@@ -22,11 +31,25 @@ function PropertyDetail() {
         setProperty(snapshot.val());
       } else {
         console.log("No data available");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No property data available',
+        }).then(() => {
+          navigate('/properties');
+        });
       }
     }).catch((error) => {
       console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load property data',
+        }).then(() => {
+          navigate('/properties');
+      });
     });
-  }, [id]);
+  }, [id, navigate]);
 
   useEffect(() => {
     // Update max-height of details section after property data is loaded
@@ -38,13 +61,13 @@ function PropertyDetail() {
 
   console.log("image urls", property?.image_urls);
 
-  // Convert the description into a list
   const getDescriptionList = (description) => {
-    return description.split(/\.+|\n+/).map((item, index) => (
+    return description.split(/(?:\.{2,}|\n+)/).map((item, index) => (
       // Ensure that the item is not empty or just whitespace
       item.trim() && <li key={index}>{item.trim()}</li>
     ));
   };
+  
 
   const openLightbox = (index) => {
     setPhotoIndex(index);
@@ -59,6 +82,7 @@ function PropertyDetail() {
     <div className={styles.pageContainer}>
       <h1>{property.address}</h1>
       <div className={styles.container}>
+        {property.image_urls && property.image_urls.length > 0 ? (
         <div className={styles.imageGallery}>
           {property.image_urls.map((url, index) => (
             <img
@@ -70,6 +94,9 @@ function PropertyDetail() {
             />
           ))}
         </div>
+      ) : (
+        <div className={styles.noImages}>No images available</div>
+      )}
         {isOpen && (
           <Lightbox 
             mainSrc={property.image_urls[photoIndex]}
@@ -92,6 +119,11 @@ function PropertyDetail() {
           {property.currently_available && ( // Check if property is available
             <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`}>
               <button className={styles.applyButton}>Apply Now</button> {/* Apply button with styles */}
+            </Link>
+          )}
+          {isAdmin && (
+            <Link to={`/editproperties/${id}`}>
+              <button className={styles.editButton}>Edit Property</button> {/* Edit button with styles */}
             </Link>
           )}
         </div>

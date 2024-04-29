@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ref, get, child, update, remove } from "firebase/database";
+import { ref, get, update, remove } from "firebase/database";
 import { uploadBytes, ref as storageRef, getDownloadURL } from "firebase/storage";
 import { deleteObject } from "firebase/storage";
 import { storage, database } from '../../index.js';
@@ -72,7 +72,12 @@ function EditPropertyDetails() {
       }
     }).catch((error) => {
       console.error(error);
-      Swal.fire('Error!', 'Failed to fetch property details.', 'error');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to fetch property details. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+        footer: 'If the problem persists, show this message to david.'
+      });
     });
   }, [id]);
 
@@ -129,7 +134,12 @@ function EditPropertyDetails() {
       Swal.fire('Uploaded!', 'Your image has been uploaded.', 'success');
     } catch (error) {
       console.error('Error uploading image:', error);
-      Swal.fire('Error!', 'Failed to upload image.', 'error');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `Failed to add image. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+        footer: 'If the problem persists, show this message to david.'
+      });
     } finally {
       setLoading(false);
     }
@@ -169,7 +179,12 @@ function EditPropertyDetails() {
           Swal.fire('Removed!', 'The image has been removed.', 'success');
         } catch (error) {
           console.error('Error removing image:', error);
-          Swal.fire('Error!', 'An error occurred while deleting the image.', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Error: ${error.message}`, 
+            footer: 'If the problem persists, show this message to david.'
+          });
         }
       }
     });
@@ -189,7 +204,7 @@ function EditPropertyDetails() {
   const handleSave = async () => {
     setLoading(true);
     const propertyRef = ref(database, `properties/${id}`);
-    formData.thumbnail_image_url = formData.image_urls[0];
+    formData.thumbnail_image_url = formData.image_urls.length > 0 ? formData.image_urls[0] : null;
     await update(propertyRef, formData).then(() => {
       console.log('Data updated successfully!');
       setLoading(false);
@@ -209,8 +224,9 @@ function EditPropertyDetails() {
       // Show SweetAlert error modal with animation
       Swal.fire({
         icon: 'error',
-        title: 'Error!',
-        text: 'Failed to save property details.',
+        title: 'Error',
+        text: `Failed to save property. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+        footer: 'If the problem persists, show this message to david.'
       });
     });
   };
@@ -245,7 +261,12 @@ function EditPropertyDetails() {
             await deleteObject(imageRef);
           } catch (error) {
             console.error('Error deleting image:', error);
-            // Handle error deleting image from storage
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: `Error deleting image. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+              footer: 'If the problem persists, show this message to david.'
+            });
           }
         }));
   
@@ -256,7 +277,12 @@ function EditPropertyDetails() {
             navigate('/editproperties'); 
           })
           .catch((error) => {
-            Swal.fire('Error!', 'An error occurred while deleting the property.', 'error');
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: `Failed to delete property. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+              footer: 'If the problem persists, show this message to david.'
+            });
             console.error('Error deleting property:', error);
           })
           .finally(() => {

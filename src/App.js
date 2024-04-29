@@ -1,7 +1,7 @@
 import './App.css';
 
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Import your custom components

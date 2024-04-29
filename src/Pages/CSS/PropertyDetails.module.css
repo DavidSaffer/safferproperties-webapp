@@ -38,6 +38,9 @@
   max-height: 0px; 
   overflow-y: auto; 
   margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -83,4 +86,17 @@
 
 .applyButton:hover {
   background-color: #0056b3; /* Darker blue color on hover */
+}
+
+.editButton {
+  background-color: #28a745; /* Green color */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.editButton:hover {
+  background-color: #1e7e34; /* Darker green color on hover */
 }
