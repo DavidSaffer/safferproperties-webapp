@@ -57,7 +57,7 @@ function PropertyDetail() {
 
   return (
     <div className={styles.pageContainer}>
-      <h1>Property Details</h1>
+      <h1>{property.address}</h1>
       <div className={styles.container}>
         <div className={styles.imageGallery}>
           {property.image_urls.map((url, index) => (
