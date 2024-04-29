@@ -25,12 +25,12 @@ const ImageReorderComponent = () => {
     })
   );
 
-  const handleImageUpload = (event) => {
+  const handleImageUpload = event => {
     const fileReader = new FileReader();
     const file = event.target.files[0];
 
     fileReader.onloadend = () => {
-      setItems((prevItems) => [...prevItems, fileReader.result]);
+      setItems(prevItems => [...prevItems, fileReader.result]);
     };
 
     if (file) {
@@ -38,13 +38,13 @@ const ImageReorderComponent = () => {
     }
   };
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = event => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.findIndex((item) => item === active.id);
-        const newIndex = items.findIndex((item) => item === over.id);
+      setItems(items => {
+        const oldIndex = items.findIndex(item => item === active.id);
+        const newIndex = items.findIndex(item => item === over.id);
 
         return arrayMove(items, oldIndex, newIndex);
       });
@@ -55,9 +55,13 @@ const ImageReorderComponent = () => {
     <div>
       <h3>Upload and Reorder Images</h3>
       <input type="file" onChange={handleImageUpload} accept="image/*" />
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          {items.map((src) => (
+          {items.map(src => (
             <SortableItem key={src} id={src} src={src} />
           ))}
         </SortableContext>

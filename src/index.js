@@ -5,11 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
 // TODO: Add SDKs for Firebase products that you want to use
-import { getDatabase } from "firebase/database";
-import { getStorage } from "firebase/storage";
+import { getDatabase } from 'firebase/database';
+import { getStorage } from 'firebase/storage';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -17,7 +17,6 @@ import { getStorage } from "firebase/storage";
 
 // User auth
 import { getAuth } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 import { AuthProvider } from './AuthContext.js';
 
@@ -29,9 +28,8 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
-
 
 // Initialize Firebase
 const firebase = initializeApp(firebaseConfig);
@@ -56,4 +54,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export {firebase, database, analytics, auth, storage};
+export { firebase, database, analytics, auth, storage };

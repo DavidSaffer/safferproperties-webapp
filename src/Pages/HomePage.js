@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue } from 'firebase/database';
 import { database } from '../index.js';
 import { Link } from 'react-router-dom';
 
 import PropertyCard from '../components/PropertyCard';
-import logo from '../Assets/logo.jpg';
+import logo from '../Assets/logo6.png';
 
 import styles from './CSS/HomePage.module.css';
 
@@ -13,7 +13,7 @@ function HomePage() {
 
   useEffect(() => {
     const propertiesRef = ref(database, 'properties/');
-    onValue(propertiesRef, (snapshot) => {
+    onValue(propertiesRef, snapshot => {
       const data = snapshot.val();
       const propertyList = [];
       for (let id in data) {
@@ -23,15 +23,18 @@ function HomePage() {
       setProperties(propertyList.slice(0, 2));
     });
   }, []);
-  
+
   return (
     <div className={styles.container}>
       <div className={styles.heroSection}>
         <img src={logo} alt="Company Logo" className={styles.logo} />
-        <h1>Welcome to Our Property Management Service</h1>
-        <p>Explore our properties, find resources, and connect with us for all your property needs.</p>
-        <Link to="/properties?filter=available" style={{ textDecoration: 'none' }}>
-          <button className={styles.ctaButton}>Currently Available Properties</button>
+        <Link
+          to="/properties?filter=available"
+          style={{ textDecoration: 'none' }}
+        >
+          <button className={styles.ctaButton}>
+            Currently Available Properties
+          </button>
         </Link>
       </div>
       <div className={styles.featureSection}>
@@ -39,7 +42,11 @@ function HomePage() {
         <div className={styles.propertiesList}>
           {properties.map(property => (
             <li key={property.id} className={styles.propertyCard}>
-              <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
+              <PropertyCard
+                key={property.id}
+                property={property}
+                linkTo={`/properties/${property.id}`}
+              />
             </li>
           ))}
         </div>

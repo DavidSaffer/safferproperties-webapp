@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ref, get, child } from "firebase/database";
+import { ref, get, child } from 'firebase/database';
 import { database } from '../index.js';
 import Lightbox from 'react-18-image-lightbox';
-import 'react-18-image-lightbox/style.css'; 
+import 'react-18-image-lightbox/style.css';
 
 import { useAuth } from '../AuthContext.js';
 
@@ -13,7 +13,6 @@ import Swal from 'sweetalert2';
 import styles from './CSS/PropertyDetails.module.css';
 
 function PropertyDetail() {
-  
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -26,29 +25,31 @@ function PropertyDetail() {
 
   useEffect(() => {
     const propertyRef = ref(database);
-    get(child(propertyRef, `properties/${id}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        setProperty(snapshot.val());
-      } else {
-        console.log("No data available");
+    get(child(propertyRef, `properties/${id}`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          setProperty(snapshot.val());
+        } else {
+          console.log('No data available');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No property data available',
+          }).then(() => {
+            navigate('/properties');
+          });
+        }
+      })
+      .catch(error => {
+        console.error(error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No property data available',
+          text: 'Failed to load property data',
         }).then(() => {
           navigate('/properties');
         });
-      }
-    }).catch((error) => {
-      console.error(error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to load property data',
-        }).then(() => {
-          navigate('/properties');
       });
-    });
   }, [id, navigate]);
 
   useEffect(() => {
@@ -59,17 +60,39 @@ function PropertyDetail() {
     }
   }, [property]);
 
-  console.log("image urls", property?.image_urls);
+  const getRoomInfo = () => {
+    const bedroomsInfo = property.bedrooms
+      ? `${property.bedrooms} Bedrooms`
+      : '';
+    const bathroomsInfo = property.bathrooms
+      ? `${property.bathrooms} Bathrooms`
+      : '';
+    const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
-  const getDescriptionList = (description) => {
-    return description.split(/(?:\.{2,}|\n+)/).map((item, index) => (
-      // Ensure that the item is not empty or just whitespace
-      item.trim() && <li key={index}>{item.trim()}</li>
-    ));
+    return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
   };
-  
 
-  const openLightbox = (index) => {
+  const convertPriceToCurrency = price => {
+    price = parseFloat(price);
+    if (isNaN(price)) {
+      return '';
+    }
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+    });
+  };
+
+  const getDescriptionList = description => {
+    return description.split(/(?:\.{2,}|\n+)/).map(
+      (item, index) =>
+        // Ensure that the item is not empty or just whitespace
+        item.trim() && <li key={index}>{item.trim()}</li>
+    );
+  };
+
+  const openLightbox = index => {
     setPhotoIndex(index);
     setIsOpen(true);
   };
@@ -83,28 +106,38 @@ function PropertyDetail() {
       <h1>{property.address}</h1>
       <div className={styles.container}>
         {property.image_urls && property.image_urls.length > 0 ? (
-        <div className={styles.imageGallery}>
-          {property.image_urls.map((url, index) => (
-            <img
-              key={index}
-              src={url}
-              alt={`Property ${index}`}
-              className={styles.image}
-              onClick={() => openLightbox(index)}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className={styles.noImages}>No images available</div>
-      )}
+          <div className={styles.imageGallery}>
+            {property.image_urls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`Property ${index}`}
+                className={styles.image}
+                onClick={() => openLightbox(index)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.noImages}>No images available</div>
+        )}
         {isOpen && (
-          <Lightbox 
+          <Lightbox
             mainSrc={property.image_urls[photoIndex]}
-            nextSrc={property.image_urls[(photoIndex + 1) % property.image_urls.length]}
-            prevSrc={property.image_urls[(photoIndex + property.image_urls.length - 1) % property.image_urls.length]}
+            nextSrc={
+              property.image_urls[(photoIndex + 1) % property.image_urls.length]
+            }
+            prevSrc={
+              property.image_urls[
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              ]
+            }
             onCloseRequest={() => setIsOpen(false)}
             onMovePrevRequest={() =>
-              setPhotoIndex((photoIndex + property.image_urls.length - 1) % property.image_urls.length)
+              setPhotoIndex(
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              )
             }
             onMoveNextRequest={() =>
               setPhotoIndex((photoIndex + 1) % property.image_urls.length)
@@ -113,17 +146,29 @@ function PropertyDetail() {
         )}
         <div ref={detailsRef} className={styles.details}>
           <h2>{property.address}</h2>
+          {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          <p>Price: ${property.price}</p>
-          <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
+          {convertPriceToCurrency(property.price) && (
+            <p>Price: {convertPriceToCurrency(property.price)}</p>
+          )}
+          <p>
+            Status:{' '}
+            {property.currently_available ? 'Available' : 'Not Available'}
+          </p>
           {property.currently_available && ( // Check if property is available
-            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`}>
-              <button className={styles.applyButton}>Apply Now</button> {/* Apply button with styles */}
+            <Link
+              to={`/rental-application?address=${encodeURIComponent(
+                property.address
+              )}`}
+            >
+              <button className={styles.applyButton}>Apply Now</button>{' '}
+              {/* Apply button with styles */}
             </Link>
           )}
           {isAdmin && (
             <Link to={`/editproperties/${id}`}>
-              <button className={styles.editButton}>Edit Property</button> {/* Edit button with styles */}
+              <button className={styles.editButton}>Edit Property</button>{' '}
+              {/* Edit button with styles */}
             </Link>
           )}
         </div>

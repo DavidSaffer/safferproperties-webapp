@@ -17,20 +17,31 @@ function RentalApplication() {
     <div className={styles.container}>
       <h1 className={styles.title}>How to Apply</h1>
       <p className={styles.instructions}>
-        To apply for {address ? `the property located at ${address}` : 'the rental'}, please follow the instructions below:
+        To apply for{' '}
+        {address ? `the property located at ${address}` : 'the rental'}, please
+        follow the instructions below:
       </p>
       <ol>
         <li>
-          Download the {address ? `application form for ${address}` : 'rental application form'} by clicking{' '}
+          Download the{' '}
+          {address
+            ? `application form for ${address}`
+            : 'rental application form'}{' '}
+          by clicking{' '}
           <a className={styles.link} href={rentalApp} download>
             here
           </a>
           .
         </li>
         <li>Fill out the application form with accurate information.</li>
-        <li>Submit the completed application form to the landlord or property manager.</li>
+        <li>
+          Submit the completed application form to the landlord or property
+          manager.
+        </li>
       </ol>
-      <p>If you have any questions, please contact us at example@example.com.</p>
+      <p>
+        If you have any questions, please contact us at example@example.com.
+      </p>
       {address && (
         <button className={styles.returnButton} onClick={() => navigate(-1)}>
           Return to {address}

@@ -3,13 +3,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 export const SortableItem = ({ id, src, onRemove }) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: String(id) });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: String(id) });
 
   const cardStyle = {
     background: '#fff',
@@ -43,11 +38,21 @@ export const SortableItem = ({ id, src, onRemove }) => {
 
   return (
     <div style={cardStyle}>
-      <div ref={setNodeRef} style={{ ...imageStyle, transform: CSS.Transform.toString(transform), transition }} {...attributes} {...listeners}>
+      <div
+        ref={setNodeRef}
+        style={{
+          ...imageStyle,
+          transform: CSS.Transform.toString(transform),
+          transition,
+        }}
+        {...attributes}
+        {...listeners}
+      >
         <img src={src} alt={`Property`} style={imageStyle} />
       </div>
-      <button type="button" onClick={() => onRemove(id)} style={buttonStyle}>Remove</button>
+      <button type="button" onClick={() => onRemove(id)} style={buttonStyle}>
+        Remove
+      </button>
     </div>
   );
 };
-

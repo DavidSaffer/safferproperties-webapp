@@ -16,13 +16,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       const adminRef = ref(database, `admins/${user.uid}`);
-      get(adminRef).then(snapshot => {
-        setIsAdmin(snapshot.exists());
-      }).catch(error => {
-        console.error("Failed to check admin status:", error);
-      });
+      get(adminRef)
+        .then(snapshot => {
+          setIsAdmin(snapshot.exists());
+        })
+        .catch(error => {
+          console.error('Failed to check admin status:', error);
+        });
     } else {
-      setIsAdmin(false);  // Ensure isAdmin is reset if user logs out
+      setIsAdmin(false); // Ensure isAdmin is reset if user logs out
     }
   }, [user]);
 

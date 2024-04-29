@@ -1,6 +1,5 @@
 import './App.css';
 
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -25,12 +24,9 @@ import EditPropertyDetails from './Pages/AdminPages/EditPropertyDetails.js';
 // import { ref, get, child} from 'firebase/database';
 import { useAuth } from './AuthContext.js';
 
-
-
 function App() {
-
-  const {isAdmin} = useAuth();
-  console.log("isAdmin:", isAdmin);
+  const { isAdmin } = useAuth();
+  console.log('isAdmin:', isAdmin);
 
   return (
     <>
@@ -45,8 +41,15 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
             {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
-            {isAdmin && <Route path="/editproperties" element={<EditProperties />} />}
-            {isAdmin && <Route path="/editproperties/:id" element={<EditPropertyDetails />} />}
+            {isAdmin && (
+              <Route path="/editproperties" element={<EditProperties />} />
+            )}
+            {isAdmin && (
+              <Route
+                path="/editproperties/:id"
+                element={<EditPropertyDetails />}
+              />
+            )}
           </Routes>
         </Router>
       </div>

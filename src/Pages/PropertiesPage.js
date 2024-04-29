@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ref, onValue } from "firebase/database";
+import { ref, onValue } from 'firebase/database';
 import { database } from '../index.js';
 import { useLocation } from 'react-router-dom';
 
@@ -12,18 +12,18 @@ function PropertiesPage() {
   const queryParams = new URLSearchParams(location.search); // Get query parameters from URL
   const filterAvailableParam = queryParams.get('filter');
 
-
   const [properties, setProperties] = useState([]);
-  const [filterAvailable, setFilterAvailable] = useState(filterAvailableParam === 'available');
+  const [filterAvailable, setFilterAvailable] = useState(
+    filterAvailableParam === 'available'
+  );
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
 
   useEffect(() => {
-    
     const propertiesRef = ref(database, 'properties/');
-    
-    onValue(propertiesRef, (snapshot) => {
+
+    onValue(propertiesRef, snapshot => {
       const data = snapshot.val();
-      
+
       const propertyList = [];
       for (let id in data) {
         propertyList.push({ id, ...data[id] });
@@ -36,13 +36,16 @@ function PropertiesPage() {
     if (filterAvailable && !property.currently_available) {
       return false;
     }
-    if (selectedPropertyType && property.property_type !== selectedPropertyType) {
+    if (
+      selectedPropertyType &&
+      property.property_type !== selectedPropertyType
+    ) {
       return false;
     }
     return true;
   });
 
-  const handlePropertyTypeChange = (event) => {
+  const handlePropertyTypeChange = event => {
     setSelectedPropertyType(event.target.value);
   };
 
@@ -61,7 +64,10 @@ function PropertiesPage() {
       </div>
       <div className={styles.filterSection}>
         <label>Property Type: </label>
-        <select value={selectedPropertyType} onChange={handlePropertyTypeChange}>
+        <select
+          value={selectedPropertyType}
+          onChange={handlePropertyTypeChange}
+        >
           <option value="">All</option>
           <option value="Residential">Residential</option>
           <option value="Vacation">Vacation</option>
@@ -71,7 +77,11 @@ function PropertiesPage() {
       <ul className={styles.propertiesList}>
         {filteredProperties.map(property => (
           <li key={property.id}>
-            <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
+            <PropertyCard
+              key={property.id}
+              property={property}
+              linkTo={`/properties/${property.id}`}
+            />
           </li>
         ))}
       </ul>
