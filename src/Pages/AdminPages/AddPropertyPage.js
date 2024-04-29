@@ -4,6 +4,9 @@ import { ref as databaseRef, set, get } from 'firebase/database';
 import { storage, database } from '../../index.js'; // Adjust import paths based on your setup
 import styles from './CSS/AddPropertyPage.module.css';
 
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 import {
   DndContext,
   closestCenter,
@@ -23,8 +26,8 @@ import {
 import { SortableItem } from '../../components/SortableItemComponent.js';
 
 const AddPropertyForm = () => {
+  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
-
   const [formData, setFormData] = useState({
     address: '',
     bedrooms: '',
@@ -136,7 +139,15 @@ const AddPropertyForm = () => {
   
     set(newPropertyRef, propertyData)
       .then(() => {
-        alert('Property added successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Property Added!',
+          showConfirmButton: true,
+          timer: 1500,
+          willClose: () => {
+            navigate(`/editproperties/${name}`); // Redirect to desired page after saving
+          }
+        });
         clearForm();
         setSubmitting(false); // Stop the animation and enable the button
       })
@@ -195,6 +206,13 @@ const AddPropertyForm = () => {
               <option value="Vacation">Vacation</option>
             </select>
           </label>
+        
+          <div>
+          <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
+            {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
+          </button>
+            <button type="button" onClick={clearForm} className={styles.button}>Clear</button>
+          </div>
 
         <label className={styles.label}>
           Add Images: 
@@ -208,12 +226,7 @@ const AddPropertyForm = () => {
             ))}
           </SortableContext>
         </DndContext>
-        <div>
-          <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
-            {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
-          </button>
-            <button type="button" onClick={clearForm} className={styles.button}>Clear</button>
-        </div>
+        
       </form>
     </div>
   );
