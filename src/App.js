@@ -41,15 +41,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
             {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
-            {isAdmin && (
-              <Route path="/editproperties" element={<EditProperties />} />
-            )}
-            {isAdmin && (
-              <Route
-                path="/editproperties/:id"
-                element={<EditPropertyDetails />}
-              />
-            )}
+            {isAdmin && <Route path="/editproperties" element={<EditProperties />} />}
+            {isAdmin && <Route path="/editproperties/:id" element={<EditPropertyDetails />} />}
           </Routes>
         </Router>
       </div>

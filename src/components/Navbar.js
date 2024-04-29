@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../index.js';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import { useAuth } from '../AuthContext.js';
+
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import './CSS/Navbar.css'; // Import CSS file for styling
 
-const Navbar = () => {
+const MyNavbar = () => {
   const [user] = useAuthState(auth);
   const { isAdmin } = useAuth();
+  const [expanded, setExpanded] = useState(false);
 
   const logout = () => {
     auth.signOut();
@@ -26,95 +30,58 @@ const Navbar = () => {
       });
   };
 
-  const linkStyle = ({ isActive }) => ({
-    color: isActive ? '#00A6E4' : '#fff', // Change color to yellow when active
-    //textShadow: isActive ? '0 0 4px #ffcc00' : 'none' // Optional: add shadow for emphasis
-  });
-
   return (
-    <nav className="navbar">
-      <ul className="navbar-list">
-        <li className="navbar-item">
-          <NavLink to="/" className="navbar-link" end style={linkStyle}>
-            Home
-          </NavLink>
-        </li>
-        <li className="navbar-item">
-          <NavLink to="/properties" className="navbar-link" style={linkStyle}>
-            Properties
-          </NavLink>
-        </li>
-        <li className="navbar-item">
-          <NavLink to="/about" className="navbar-link" style={linkStyle}>
-            About
-          </NavLink>
-        </li>
-        <li className="navbar-item">
-          <NavLink to="/contact" className="navbar-link" style={linkStyle}>
-            Contact
-          </NavLink>
-        </li>
-        <li className="navbar-item">
-          <NavLink
-            to="/rental-application"
-            className="navbar-link"
-            style={linkStyle}
-          >
-            Rental Application
-          </NavLink>
-        </li>
-        {isAdmin && (
-          <li className="navbar-item">
-            <NavLink
-              to="/addproperty"
-              className="navbar-link"
-              style={linkStyle}
-            >
-              Add Property
-            </NavLink>
-          </li>
-        )}
-        {isAdmin && (
-          <li className="navbar-item">
-            <NavLink
-              to="/editproperties"
-              className="navbar-link"
-              style={linkStyle}
-            >
-              Edit Properties
-            </NavLink>
-          </li>
-        )}
-      </ul>
-      {user ? (
-        <ul className="navbar-list auth-links">
-          <li className="navbar-item">
-            <span className="navbar-link">{user.displayName || 'User'}</span>
-            <span
-              className={
-                isAdmin ? 'admin-status admin' : 'admin-status not-admin'
-              }
-            >
-              {isAdmin ? 'Admin' : 'Not Admin'}
-            </span>
-          </li>
-          <li className="navbar-item">
-            <button onClick={logout} className="navbar-link">
-              Logout
-            </button>
-          </li>
-        </ul>
-      ) : (
-        <ul className="navbar-list auth-links">
-          <li className="navbar-item">
-            <button onClick={signInWithGoogle} className="navbar-link">
-              Login with Google
-            </button>
-          </li>
-        </ul>
-      )}
-    </nav>
+    <Navbar bg="dark" variant="dark" sticky="top" expand="xl" expanded={expanded}>
+      <Container fluid>
+        <Navbar.Brand as={NavLink} to="/" onClick={() => setExpanded(false)}>
+          Saffer Properties
+        </Navbar.Brand>
+        <Navbar.Toggle onClick={() => setExpanded(expanded => !expanded)} aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="justify-content-end">
+          <Nav className="me-auto">
+            <Nav.Link as={NavLink} to="/" onClick={() => setExpanded(false)}>
+              Home
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/properties" onClick={() => setExpanded(false)}>
+              Properties
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/about" onClick={() => setExpanded(false)}>
+              About
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/contact" onClick={() => setExpanded(false)}>
+              Contact
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/rental-application" onClick={() => setExpanded(false)}>
+              Rental Application
+            </Nav.Link>
+            {isAdmin && (
+              <Nav.Link as={NavLink} to="/addproperty" onClick={() => setExpanded(false)}>
+                Add Property
+              </Nav.Link>
+            )}
+            {isAdmin && (
+              <Nav.Link as={NavLink} to="/editproperties" onClick={() => setExpanded(false)}>
+                Edit Properties
+              </Nav.Link>
+            )}
+          </Nav>
+
+          <Nav className="ms-auto">
+            {user ? (
+              <>
+                <NavDropdown title={user.displayName || 'User'} id="collasible-nav-dropdown">
+                  {isAdmin && <NavDropdown.Header>Admin</NavDropdown.Header>}
+                  <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              <Nav.Link onClick={signInWithGoogle}>Login with Google</Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default MyNavbar;

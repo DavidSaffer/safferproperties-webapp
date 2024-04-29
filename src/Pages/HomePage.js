@@ -28,13 +28,8 @@ function HomePage() {
     <div className={styles.container}>
       <div className={styles.heroSection}>
         <img src={logo} alt="Company Logo" className={styles.logo} />
-        <Link
-          to="/properties?filter=available"
-          style={{ textDecoration: 'none' }}
-        >
-          <button className={styles.ctaButton}>
-            Currently Available Properties
-          </button>
+        <Link to="/properties?filter=available" style={{ textDecoration: 'none' }}>
+          <button className={styles.ctaButton}>Currently Available Properties</button>
         </Link>
       </div>
       <div className={styles.featureSection}>
@@ -42,11 +37,7 @@ function HomePage() {
         <div className={styles.propertiesList}>
           {properties.map(property => (
             <li key={property.id} className={styles.propertyCard}>
-              <PropertyCard
-                key={property.id}
-                property={property}
-                linkTo={`/properties/${property.id}`}
-              />
+              <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
             </li>
           ))}
         </div>

@@ -4,6 +4,10 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "jsxSingleQuote": false,
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "printWidth": 200,
+    "bracketSameLine": true,
+    "proseWrap": "preserve",
+    "htmlWhitespaceSensitivity": "css"
 }
   
