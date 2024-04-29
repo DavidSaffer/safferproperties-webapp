@@ -8,6 +8,8 @@ import logo from '../Assets/logo6.png';
 
 import styles from './CSS/HomePage.module.css';
 
+import { motion } from 'framer-motion';
+
 function HomePage() {
   const [properties, setProperties] = useState([]);
 
@@ -24,10 +26,15 @@ function HomePage() {
     });
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { delay: 0.3, duration: 0.5 } },
+  };
+
   return (
-    <div className={styles.container}>
+    <motion.div className={styles.container} initial="hidden" animate="visible" variants={containerVariants}>
       <div className={styles.heroSection}>
-        <img src={logo} alt="Company Logo" className={styles.logo} />
+        <motion.img src={logo} alt="Company Logo" className={styles.logo} initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, type: 'spring', stiffness: 120 }} />
         <Link to="/properties?filter=available" style={{ textDecoration: 'none' }}>
           <button className={styles.ctaButton}>Currently Available Properties</button>
         </Link>
@@ -36,13 +43,18 @@ function HomePage() {
         <h2>Featured Properties</h2>
         <div className={styles.propertiesList}>
           {properties.map(property => (
-            <li key={property.id} className={styles.propertyCard}>
+            <motion.li
+              key={property.id}
+              className={styles.propertyCard}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 + properties.indexOf(property) * 0.2, type: 'spring', stiffness: 50 }}>
               <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
-            </li>
+            </motion.li>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
