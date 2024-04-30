@@ -1,11 +1,12 @@
 /* General styles for the form container */
 .formContainer {
-    max-width: 30%;
+    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
   }
   
   .formContainer h1 {
