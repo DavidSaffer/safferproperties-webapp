@@ -145,6 +145,7 @@ function PropertyDetail() {
             onCloseRequest={() => setIsOpen(false)}
             onMovePrevRequest={() => setPhotoIndex((photoIndex + property.image_urls.length - 1) % property.image_urls.length)}
             onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % property.image_urls.length)}
+            reactModalStyle={{ overlay: { zIndex: 9999 } }} // Set the zIndex to a high value
           />
         )}
         <div ref={detailsRef} className={styles.details}>
