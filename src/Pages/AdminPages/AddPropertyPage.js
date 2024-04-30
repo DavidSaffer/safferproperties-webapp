@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  ref as storageRef,
-  uploadBytes,
-  getDownloadURL,
-} from 'firebase/storage';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ref as databaseRef, set, get } from 'firebase/database';
 import { storage, database } from '../../index.js'; // Adjust import paths based on your setup
 import styles from './CSS/AddPropertyPage.module.css';
@@ -11,21 +7,8 @@ import styles from './CSS/AddPropertyPage.module.css';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  MouseSensor,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, MouseSensor } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 import { SortableItem } from '../../components/SortableItemComponent.js';
 
@@ -115,16 +98,7 @@ const AddPropertyForm = () => {
 
   const addProperty = async () => {
     setSubmitting(true); // Start submission and show animation
-    const {
-      address,
-      bedrooms,
-      bathrooms,
-      description,
-      images,
-      price,
-      thumbnailDescription,
-      propertyType,
-    } = formData;
+    const { address, bedrooms, bathrooms, description, images, price, thumbnailDescription, propertyType } = formData;
 
     const name = address
       .replace(/\s+/g, '-')
@@ -146,10 +120,7 @@ const AddPropertyForm = () => {
         const blob = await fetch(image).then(r => r.blob());
         const timestamp = new Date().getTime();
         const fileName = `image_${timestamp}_${index}.jpg`;
-        const imageRef = storageRef(
-          storage,
-          `properties/${newPropertyRef.key}/${fileName}`
-        );
+        const imageRef = storageRef(storage, `properties/${newPropertyRef.key}/${fileName}`);
         const snapshot = await uploadBytes(imageRef, blob);
         return getDownloadURL(snapshot.ref);
       })
@@ -214,83 +185,42 @@ const AddPropertyForm = () => {
       <form>
         <label className={styles.label}>
           Address:
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="text" name="address" value={formData.address} onChange={handleInputChange} className={styles.input} />
         </label>
         <label className={styles.label}>
           Bedrooms:
-          <input
-            type="number"
-            name="bedrooms"
-            value={formData.bedrooms}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} className={styles.input} />
         </label>
         <label className={styles.label}>
           Bathrooms:
-          <input
-            type="number"
-            name="bathrooms"
-            value={formData.bathrooms}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className={styles.input} />
         </label>
         <label className={styles.label}>
           Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className={styles.textarea}
-          ></textarea>
+          <textarea name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea}></textarea>
         </label>
         <label className={styles.label}>
           Price:
-          <input
-            type="text"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="text" name="price" value={formData.price} onChange={handleInputChange} className={styles.input} />
         </label>
         <label className={styles.label}>
           Thumbnail Description:
-          <textarea
-            name="thumbnailDescription"
-            value={formData.thumbnailDescription}
-            onChange={handleInputChange}
-            className={styles.textarea}
-          ></textarea>
+          <textarea name="thumbnailDescription" value={formData.thumbnailDescription} onChange={handleInputChange} className={styles.textarea}></textarea>
         </label>
         <label className={styles.label}>
-          Currently Available:
+          Currently Available:&nbsp;
           <input
             type="checkbox"
             name="currentlyAvailable"
             checked={formData.currentlyAvailable}
-            onChange={e =>
-              setFormData({ ...formData, currentlyAvailable: e.target.checked })
-            }
+            onChange={e => setFormData({ ...formData, currentlyAvailable: e.target.checked })}
             className={styles.checkbox}
           />
         </label>
 
         <label className={styles.label}>
-          Property Type:
-          <select
-            name="propertyType"
-            value={formData.propertyType}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
+          Property Type:&nbsp;
+          <select name="propertyType" value={formData.propertyType} onChange={handleInputChange} className={styles.select}>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
             <option value="Vacation">Vacation</option>
@@ -298,17 +228,8 @@ const AddPropertyForm = () => {
         </label>
 
         <div>
-          <button
-            type="button"
-            onClick={addProperty}
-            disabled={submitting}
-            className={styles.button}
-          >
-            {submitting ? (
-              <div className={styles.spinner}></div>
-            ) : (
-              'Add Property'
-            )}
+          <button type="button" onClick={addProperty} disabled={submitting} className={styles.button}>
+            {submitting ? <div className={styles.spinner}></div> : 'Add Property'}
           </button>
           <button type="button" onClick={clearForm} className={styles.button}>
             Clear
@@ -316,32 +237,14 @@ const AddPropertyForm = () => {
         </div>
 
         <label className={styles.label}>
-          Add Images:
-          <input
-            type="file"
-            multiple
-            onChange={handleImageUpload}
-            className={styles.inputFile}
-            accept="image/*"
-          />
+          Add Images:&nbsp;
+          <input type="file" multiple onChange={handleImageUpload} className={styles.inputFile} accept="image/*" />
         </label>
 
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={formData.images}
-            strategy={verticalListSortingStrategy}
-          >
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={formData.images} strategy={verticalListSortingStrategy}>
             {formData.images.map((src, index) => (
-              <SortableItem
-                key={index}
-                id={index}
-                src={src}
-                onRemove={() => removeImage(index)}
-              />
+              <SortableItem key={index} id={index} src={src} onRemove={() => removeImage(index)} />
             ))}
           </SortableContext>
         </DndContext>

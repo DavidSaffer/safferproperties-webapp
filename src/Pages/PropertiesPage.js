@@ -93,7 +93,7 @@ function PropertiesPage() {
             </label>
           </div>
           <div className={styles.filterSection}>
-            <label>Property Type: </label>
+            <label>Property Type: &nbsp;</label>
             <select value={selectedPropertyType} onChange={handlePropertyTypeChange}>
               <option value="">All</option>
               <option value="Residential">Residential</option>

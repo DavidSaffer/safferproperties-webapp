@@ -24,21 +24,15 @@ function EditPropertiesPage() {
     });
   }, []);
 
-  const filteredProperties = filterAvailable
-    ? properties.filter(property => property.currently_available)
-    : properties;
+  const filteredProperties = filterAvailable ? properties.filter(property => property.currently_available) : properties;
 
   return (
     <div className={styles.container}>
       <h1>Edit Properties</h1>
       <div className={styles.filterSection}>
         <label>
-          <input
-            type="checkbox"
-            checked={filterAvailable}
-            onChange={() => setFilterAvailable(!filterAvailable)}
-          />
-          Only show available properties
+          <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} />
+          &nbsp;Only show available properties
         </label>
       </div>
       <ul className={styles.propertiesList}>

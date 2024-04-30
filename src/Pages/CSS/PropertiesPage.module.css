@@ -41,3 +41,8 @@
 .filterSection {
     margin-bottom: 20px;
 }
+
+
+.labelWithSpace:after {
+    content: " ";
+  }
