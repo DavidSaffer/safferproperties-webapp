@@ -22,7 +22,7 @@ function HomePage() {
         propertyList.push({ id, ...data[id] });
       }
       // Setting properties to first three entries only
-      setProperties(propertyList.slice(0, 2));
+      setProperties(propertyList.slice(0, 1));
     });
   }, []);
 

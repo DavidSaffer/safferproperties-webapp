@@ -7,6 +7,13 @@
     align-items: center;
 }
 
+.title {
+    color: #2A4F96;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
 .propertiesList {
     list-style-type: none;
     padding: 0;

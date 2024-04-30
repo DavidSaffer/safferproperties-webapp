@@ -23,7 +23,7 @@ const Contact = () => {
       opacity: 1,
       scale: 1,
       transition: {
-        delayChildren: 0.3,  // Start animating children after 0.3 seconds
+        delayChildren: 0.3, // Start animating children after 0.3 seconds
         staggerChildren: 0.2, // Each child animates 0.2 seconds after the previous one
       },
     },
@@ -37,26 +37,20 @@ const Contact = () => {
       opacity: 1,
       transition: {
         duration: 0.5, // Animation duration
-      }
+      },
     },
   };
 
   return (
     <div className={styles.contactContainer}>
-      <motion.h1
-        className={styles.header}
-        variants={headerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <motion.h1 className={styles.header} variants={headerVariants} initial="hidden" animate="visible">
         Contact Us
       </motion.h1>
       <motion.div
         className={styles.contactContainer} // Apply the container animation to the main container
         variants={containerVariants}
         initial="hidden"
-        animate="visible"
-      >
+        animate="visible">
         <motion.div
           className={styles.contactBlock}
           variants={itemVariants} // Apply the item variants for individual items

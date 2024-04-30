@@ -20,6 +20,18 @@ function PropertiesPage() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const headerVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5, // Duration of the animation
+        delay: 0.2, // Starts after 0.2 seconds
+      },
+    },
+  };
+
   const containerVariants = {
     hidden: { opacity: 1, scale: 0 },
     visible: {
@@ -27,7 +39,7 @@ function PropertiesPage() {
       scale: 1,
       transition: {
         delayChildren: 0.3,
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
       },
     },
   };
@@ -71,10 +83,10 @@ function PropertiesPage() {
   return (
     <>
       <div className={styles.container}>
-        <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        <motion.h1 className={styles.title} variants={headerVariants} initial="hidden" animate="visible">
           Properties
         </motion.h1>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        <motion.div variants={headerVariants} initial="hidden" animate="visible">
           <div className={styles.filterSection}>
             <label>
               <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} /> Only show available properties
