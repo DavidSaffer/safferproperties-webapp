@@ -159,6 +159,7 @@ const AddPropertyForm = () => {
           title: 'Property Added!',
           showConfirmButton: true,
           timer: 1500,
+          timerProgressBar: true,
           willClose: () => {
             navigate(`/editproperties/${name}`); // Redirect to desired page after saving
           },

@@ -70,6 +70,12 @@
 }
 
 
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
 .applyButton {
   background-color: #007bff; /* Blue color */
   color: white; /* White text color */
@@ -77,10 +83,16 @@
   border-radius: 4px; /* Rounded corners */
   padding: 10px 20px; /* Padding */
   cursor: pointer; /* Cursor on hover */
+  text-decoration: none; /* No underline */
+  display: inline-block; /* Ensure proper spacing and alignment */
+  text-align: center; /* Center text */
+
+  width: fit-content;
 }
 
 .applyButton:hover {
   background-color: #0056b3; /* Darker blue color on hover */
+  text-decoration: none; /* No underline on hover */
 }
 
 .editButton {
@@ -90,9 +102,32 @@
   border-radius: 4px; /* Rounded corners */
   padding: 10px 20px; /* Padding */
   cursor: pointer; /* Cursor on hover */
+  text-decoration: none; /* No underline */
+  display: inline-block; /* Ensure proper spacing and alignment */
+  text-align: center; /* Center text */
+
+  width: fit-content;
 }
 
 .editButton:hover {
   background-color: #1e7e34; /* Darker green color on hover */
+  text-decoration: none; /* No underline on hover */
 }
 
+.toggleButton {
+  background-color: #ffc107; /* Yellow color to distinguish it */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  cursor: pointer; /* Cursor on hover */
+  text-decoration: none; /* No underline */
+  display: inline-block; /* Ensure proper spacing and alignment */
+  text-align: center; /* Center text */
+  width: fit-content; /* Fit the content width */
+}
+
+.toggleButton:hover {
+  background-color: #e0a800; /* Darker yellow color on hover */
+  text-decoration: none; /* No underline on hover */
+}

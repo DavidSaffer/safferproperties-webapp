@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ref, get, child } from 'firebase/database';
+import { ref, get, child, update } from 'firebase/database';
 import { database } from '../index.js';
 import Lightbox from 'react-18-image-lightbox';
 import 'react-18-image-lightbox/style.css';
@@ -56,6 +56,47 @@ function PropertyDetail() {
       });
   }, [id, navigate]);
 
+  const toggleAvailability = () => {
+    const newAvailability = !property.currently_available;
+
+    // Update the state locally first
+    setProperty(prevProperty => ({
+      ...prevProperty,
+      currently_available: newAvailability,
+    }));
+
+    // Construct the path to the property data in Firebase
+    const propertyRef = ref(database, `properties/${id}`);
+
+    // Update the property in Firebase
+    update(propertyRef, { currently_available: newAvailability })
+      .then(() => {
+        console.log('Property availability updated successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Property availability has been successfully updated.',
+          timer: 3000, //close automatically after 3 seconds
+          timerProgressBar: true,
+        });
+      })
+      .catch(error => {
+        console.error('Failed to update property availability:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Update',
+          text: `Could not update property availability in the database.Please try again. Error: ${error.message}`,
+          footer: 'If the problem persists, show this message to david.',
+        });
+
+        // Revert state change if the database update fails
+        setProperty(prevProperty => ({
+          ...prevProperty,
+          currently_available: !newAvailability,
+        }));
+      });
+  };
+
   useEffect(() => {
     // Update max-height of details section after property data is loaded
     if (property) {
@@ -95,15 +136,19 @@ function PropertyDetail() {
   };
 
   const convertPriceToCurrency = price => {
-    price = parseFloat(price);
-    if (isNaN(price)) {
-      return '';
+    // Regular expression to check if the price is only numbers and at most one decimal point
+    if (/^\d*\.?\d*$/.test(price)) {
+      const newPrice = parseFloat(price);
+      if (!isNaN(newPrice)) {
+        return newPrice.toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          minimumFractionDigits: 0,
+        });
+      }
     }
-    return price.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    });
+    // Return the original price if it contains any characters other than numbers and a decimal point
+    return price;
   };
 
   const getDescriptionList = description => {
@@ -152,17 +197,29 @@ function PropertyDetail() {
           <h2>{property.address}</h2>
           {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          {convertPriceToCurrency(property.price) && <p>Price: {convertPriceToCurrency(property.price)}</p>}
+          {property.currently_available && <p>Price: {convertPriceToCurrency(property.price)}</p>}
           <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
           {property.currently_available && ( // Check if property is available
-            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`}>
-              <button className={styles.applyButton}>Apply Now</button> {/* Apply button with styles */}
+            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`} className={styles.applyButton}>
+              Apply Now
             </Link>
           )}
+          <hr />
+          <p>Admin Features</p>
           {isAdmin && (
-            <Link to={`/editproperties/${id}`}>
-              <button className={styles.editButton}>Edit Property</button> {/* Edit button with styles */}
-            </Link>
+            <>
+              <div className={styles.buttonContainer}>
+                <button onClick={toggleAvailability} className={styles.editButton}>
+                  Toggle Availability
+                </button>
+                <button onClick={() => navigate(`/editproperties/${id}`)} className={styles.editButton}>
+                  Edit Property
+                </button>
+                {/* <Link to={`/editproperties/${id}`} className={styles.editButton}>
+                  Edit Property
+                </Link> */}
+              </div>
+            </>
           )}
         </div>
       </div>

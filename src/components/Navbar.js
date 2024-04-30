@@ -61,11 +61,11 @@ const MyNavbar = () => {
                 Add Property
               </Nav.Link>
             )}
-            {isAdmin && (
+            {/* {isAdmin && (
               <Nav.Link as={NavLink} to="/editproperties" onClick={() => setExpanded(false)}>
                 Edit Properties
               </Nav.Link>
-            )}
+            )} */}
           </Nav>
 
           <Nav className="ms-auto">

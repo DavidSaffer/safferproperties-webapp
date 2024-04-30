@@ -221,6 +221,7 @@ function EditPropertyDetails() {
           title: 'Saved!',
           showConfirmButton: false,
           timer: 1500,
+          timerProgressBar: true,
           willClose: () => {
             navigate(`/properties/${id}`); // Redirect to desired page after saving
           },
