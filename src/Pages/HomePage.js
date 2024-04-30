@@ -22,7 +22,7 @@ function HomePage() {
         propertyList.push({ id, ...data[id] });
       }
       // Names of the properties you want to feature
-      const featuredNames = ['2410 N Madison', '3171 Spring Street', '2223 N Nottingham Street'];
+      const featuredNames = ['1111 Karens Way', '3171 Spring Street', '2223 N Nottingham Street'];
 
       // Filter properties by names listed in featuredNames
       const featuredProperties = propertyList.filter(property => featuredNames.includes(property.address));

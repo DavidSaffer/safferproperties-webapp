@@ -71,10 +71,10 @@ function PropertyDetail() {
     // This is a simple example that sets more columns for wider screens
     if (width >= 2000) {
       setNumColumns(3);
-    } else if (width >= 1260) {
-      setNumColumns(2);
+    } else if (width >= 900) {
+      setNumColumns(3);
     } else {
-      setNumColumns(1);
+      setNumColumns(2);
     }
   };
 

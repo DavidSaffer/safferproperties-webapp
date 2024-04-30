@@ -83,6 +83,19 @@ const Contact = () => {
             </a>
           </p>
         </motion.div>
+        <motion.div
+          className={styles.contactBlock}
+          variants={itemVariants} // Same item variants applied here
+        >
+          <h2>Stephanie Saffer</h2>
+          <p className={styles.title}>Property Manager</p>
+          <p>
+            Email:{' '}
+            <a href="mailto:stephaniesaffer@vt.edu" className={styles.email}>
+              stephaniesaffer@vt.edu
+            </a>
+          </p>
+        </motion.div>
       </motion.div>
     </div>
   );
