@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
 
 import styles from './CSS/PropertyDetails.module.css';
 
+import Masonry from '@mui/lab/Masonry';
+
 function PropertyDetail() {
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
@@ -19,6 +21,8 @@ function PropertyDetail() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const detailsRef = useRef(null); // Reference to the details section
   const { id } = useParams();
+
+  const [numColumns, setNumColumns] = useState(3);
 
   //const[user] = useAuthState(auth);
   const { isAdmin } = useAuth();
@@ -60,13 +64,31 @@ function PropertyDetail() {
     }
   }, [property]);
 
+  const updateColumns = () => {
+    const width = window.innerWidth;
+    console.log('Window width:', width);
+    // Here you define how you determine the number of columns based on width
+    // This is a simple example that sets more columns for wider screens
+    if (width >= 2000) {
+      setNumColumns(3);
+    } else if (width >= 1260) {
+      setNumColumns(2);
+    } else {
+      setNumColumns(1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateColumns);
+    updateColumns(); // Initial call to set the columns
+
+    // Clean up the event listener when the component unmounts
+    return () => window.removeEventListener('resize', updateColumns);
+  }, []);
+
   const getRoomInfo = () => {
-    const bedroomsInfo = property.bedrooms
-      ? `${property.bedrooms} Bedrooms`
-      : '';
-    const bathroomsInfo = property.bathrooms
-      ? `${property.bathrooms} Bathrooms`
-      : '';
+    const bedroomsInfo = property.bedrooms ? `${property.bedrooms} Bedrooms` : '';
+    const bathroomsInfo = property.bathrooms ? `${property.bathrooms} Bathrooms` : '';
     const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
@@ -103,72 +125,42 @@ function PropertyDetail() {
 
   return (
     <div className={styles.pageContainer}>
-      <h1>{property.address}</h1>
       <div className={styles.container}>
-        {property.image_urls && property.image_urls.length > 0 ? (
-          <div className={styles.imageGallery}>
-            {property.image_urls.map((url, index) => (
-              <img
-                key={index}
-                src={url}
-                alt={`Property ${index}`}
-                className={styles.image}
-                onClick={() => openLightbox(index)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className={styles.noImages}>No images available</div>
-        )}
+        <div className={styles.imageGallery}>
+          {property.image_urls && property.image_urls.length > 0 ? (
+            <Masonry columns={numColumns} spacing={2}>
+              {property.image_urls.map((url, index) => (
+                <img key={index} src={url} alt={`Property ${index}`} className={styles.image} onClick={() => openLightbox(index)} />
+              ))}
+            </Masonry>
+          ) : (
+            <div className={styles.noImages}>No images available</div>
+          )}
+        </div>
         {isOpen && (
           <Lightbox
             mainSrc={property.image_urls[photoIndex]}
-            nextSrc={
-              property.image_urls[(photoIndex + 1) % property.image_urls.length]
-            }
-            prevSrc={
-              property.image_urls[
-                (photoIndex + property.image_urls.length - 1) %
-                  property.image_urls.length
-              ]
-            }
+            nextSrc={property.image_urls[(photoIndex + 1) % property.image_urls.length]}
+            prevSrc={property.image_urls[(photoIndex + property.image_urls.length - 1) % property.image_urls.length]}
             onCloseRequest={() => setIsOpen(false)}
-            onMovePrevRequest={() =>
-              setPhotoIndex(
-                (photoIndex + property.image_urls.length - 1) %
-                  property.image_urls.length
-              )
-            }
-            onMoveNextRequest={() =>
-              setPhotoIndex((photoIndex + 1) % property.image_urls.length)
-            }
+            onMovePrevRequest={() => setPhotoIndex((photoIndex + property.image_urls.length - 1) % property.image_urls.length)}
+            onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % property.image_urls.length)}
           />
         )}
         <div ref={detailsRef} className={styles.details}>
           <h2>{property.address}</h2>
           {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          {convertPriceToCurrency(property.price) && (
-            <p>Price: {convertPriceToCurrency(property.price)}</p>
-          )}
-          <p>
-            Status:{' '}
-            {property.currently_available ? 'Available' : 'Not Available'}
-          </p>
+          {convertPriceToCurrency(property.price) && <p>Price: {convertPriceToCurrency(property.price)}</p>}
+          <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
           {property.currently_available && ( // Check if property is available
-            <Link
-              to={`/rental-application?address=${encodeURIComponent(
-                property.address
-              )}`}
-            >
-              <button className={styles.applyButton}>Apply Now</button>{' '}
-              {/* Apply button with styles */}
+            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`}>
+              <button className={styles.applyButton}>Apply Now</button> {/* Apply button with styles */}
             </Link>
           )}
           {isAdmin && (
             <Link to={`/editproperties/${id}`}>
-              <button className={styles.editButton}>Edit Property</button>{' '}
-              {/* Edit button with styles */}
+              <button className={styles.editButton}>Edit Property</button> {/* Edit button with styles */}
             </Link>
           )}
         </div>
