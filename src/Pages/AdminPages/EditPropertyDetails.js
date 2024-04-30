@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ref, get, update, remove } from 'firebase/database';
 import { uploadBytes, ref as storageRef, getDownloadURL } from 'firebase/storage';
@@ -29,7 +29,8 @@ function EditPropertyDetails() {
     bathrooms: '',
   });
   const { id } = useParams();
-  console.log(id);
+  const textareaRef = useRef(null);
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(MouseSensor),
@@ -37,6 +38,13 @@ function EditPropertyDetails() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // Reset height to ensure correct new height calculation
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
 
   useEffect(() => {
     const propertyRef = ref(database, `properties/${id}`);
@@ -69,6 +77,10 @@ function EditPropertyDetails() {
         });
       });
   }, [id]);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [formData.description]);
 
   const handleInputChange = e => {
     const { name, value, type, checked } = e.target;
@@ -315,7 +327,7 @@ function EditPropertyDetails() {
           <label htmlFor="description" className={styles.label}>
             Description:
           </label>
-          <textarea name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea} />
+          <textarea ref={textareaRef} name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea} />
 
           <label htmlFor="price" className={styles.label}>
             Price:
