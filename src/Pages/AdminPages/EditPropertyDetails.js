@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ref, get, update, remove } from 'firebase/database';
-import {
-  uploadBytes,
-  ref as storageRef,
-  getDownloadURL,
-} from 'firebase/storage';
+import { uploadBytes, ref as storageRef, getDownloadURL } from 'firebase/storage';
 import { deleteObject } from 'firebase/storage';
 import { storage, database } from '../../index.js';
 import styles from './CSS/EditPropertyDetails.module.css';
@@ -13,21 +9,8 @@ import styles from './CSS/EditPropertyDetails.module.css';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  MouseSensor,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
-} from '@dnd-kit/sortable';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, MouseSensor } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 
 import { SortableItem } from '../../components/SortableItemComponent.js';
 
@@ -175,11 +158,8 @@ function EditPropertyDetails() {
         const imageRef = storageRef(storage, imagePath);
         try {
           await deleteObject(imageRef); // Use deleteObject to remove the file
-          const newImageUrls = formData.image_urls.filter(
-            (_, i) => i !== index
-          );
-          const newThumbnailUrl =
-            newImageUrls.length > 0 ? newImageUrls[0] : null; // Update thumbnail to the first image or null if no images left
+          const newImageUrls = formData.image_urls.filter((_, i) => i !== index);
+          const newThumbnailUrl = newImageUrls.length > 0 ? newImageUrls[0] : null; // Update thumbnail to the first image or null if no images left
           setFormData(prevFormData => ({
             ...prevFormData,
             image_urls: newImageUrls,
@@ -218,8 +198,7 @@ function EditPropertyDetails() {
   const handleSave = async () => {
     setLoading(true);
     const propertyRef = ref(database, `properties/${id}`);
-    formData.thumbnail_image_url =
-      formData.image_urls.length > 0 ? formData.image_urls[0] : null;
+    formData.thumbnail_image_url = formData.image_urls.length > 0 ? formData.image_urls[0] : null;
     await update(propertyRef, formData)
       .then(() => {
         console.log('Data updated successfully!');
@@ -319,22 +298,10 @@ function EditPropertyDetails() {
       <h1>Edit Details</h1>
       <div className={styles.container}>
         <div className={styles.imageGallery}>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={formData.image_urls}
-              strategy={verticalListSortingStrategy}
-            >
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={formData.image_urls} strategy={verticalListSortingStrategy}>
               {formData.image_urls.map((url, index) => (
-                <SortableItem
-                  key={index}
-                  id={index}
-                  src={url}
-                  onRemove={() => handleRemoveImage(index)}
-                />
+                <SortableItem key={index} id={index} src={url} onRemove={() => handleRemoveImage(index)} />
               ))}
             </SortableContext>
           </DndContext>
@@ -343,68 +310,34 @@ function EditPropertyDetails() {
           <label htmlFor="address" className={styles.label}>
             Address:
           </label>
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="text" name="address" value={formData.address} onChange={handleInputChange} className={styles.input} />
 
           <label htmlFor="description" className={styles.label}>
             Description:
           </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className={styles.textarea}
-          />
+          <textarea name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea} />
 
           <label htmlFor="price" className={styles.label}>
             Price:
           </label>
-          <input
-            type="text"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            className={styles.input}
-          />
+          <input type="text" name="price" value={formData.price} onChange={handleInputChange} className={styles.input} />
 
           <div>
             <label htmlFor="bedrooms" className={styles.label}>
               Bedrooms:
             </label>
-            <input
-              type="number"
-              name="bedrooms"
-              value={formData.bedrooms}
-              onChange={handleInputChange}
-              className={styles.input}
-            />
+            <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} className={styles.input} />
 
             <label htmlFor="bathrooms" className={styles.label}>
               Bathrooms:
             </label>
-            <input
-              type="number"
-              name="bathrooms"
-              value={formData.bathrooms}
-              onChange={handleInputChange}
-              className={styles.input}
-            />
+            <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className={styles.input} />
           </div>
 
           <label htmlFor="currently_available" className={styles.label}>
             Status:
           </label>
-          <select
-            name="currently_available"
-            value={formData.currently_available}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
+          <select name="currently_available" value={formData.currently_available} onChange={handleInputChange} className={styles.select}>
             <option value={true}>Available</option>
             <option value={false}>Not Available</option>
           </select>
@@ -412,12 +345,7 @@ function EditPropertyDetails() {
           <label htmlFor="property_type" className={styles.label}>
             Property Type:
           </label>
-          <select
-            name="property_type"
-            value={formData.property_type}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
+          <select name="property_type" value={formData.property_type} onChange={handleInputChange} className={styles.select}>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
             <option value="Vacation">Vacation</option>
@@ -426,40 +354,20 @@ function EditPropertyDetails() {
           <label htmlFor="thumbnail_description" className={styles.label}>
             Thumbnail Description:
           </label>
-          <textarea
-            name="thumbnail_description"
-            value={formData.thumbnail_description}
-            onChange={handleInputChange}
-            className={styles.textarea}
-          ></textarea>
+          <textarea name="thumbnail_description" value={formData.thumbnail_description} onChange={handleInputChange} className={styles.textarea}></textarea>
 
           <div>
             <label htmlFor="imageUpload" className={styles.label}>
               Add Image:
             </label>
-            <input
-              type="file"
-              id="imageUpload"
-              onChange={handleImageUpload}
-              disabled={loading}
-              className={styles.input}
-              accept="image/*"
-            />
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" />
           </div>
 
           <div>
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className={styles.button}
-            >
+            <button onClick={handleSave} disabled={loading} className={styles.button}>
               {loading ? 'Saving...' : 'Save'}
             </button>
-            <button
-              onClick={handleDelete}
-              disabled={loading}
-              className={styles.button}
-            >
+            <button onClick={handleDelete} disabled={loading} className={styles.button}>
               {loading ? 'Deleting...' : 'Delete'}
             </button>
           </div>
