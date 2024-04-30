@@ -1,38 +1,48 @@
-/* RentalApplication.module.css */
-
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .instructions {
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-  
-  .link {
-    color: blue;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
-  
-  .returnButton {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .returnButton:hover {
-    background-color: #0056b3;
-  }
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #333;
+}
+
+.title {
+  color: #2A4F96;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.textBlock {
+  margin-top: 20px;
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.instructions, ol, button {
+  margin-bottom: 10px;
+}
+
+.link {
+  color: blue;
+  font-weight: bold;
+}
+
+.link:hover, .returnButton:hover {
+  text-decoration: underline;
+}
+
+.returnButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.returnButton:hover {
+  background-color: #0056b3;
+}
