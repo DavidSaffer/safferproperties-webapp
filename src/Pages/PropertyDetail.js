@@ -204,10 +204,11 @@ function PropertyDetail() {
               Apply Now
             </Link>
           )}
-          <hr />
-          <p>Admin Features</p>
+          
           {isAdmin && (
             <>
+              <hr />
+              <p>Admin Features</p>
               <div className={styles.buttonContainer}>
                 <button onClick={toggleAvailability} className={styles.editButton}>
                   Toggle Availability
