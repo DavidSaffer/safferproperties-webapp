@@ -77,8 +77,7 @@ function PropertiesPage() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
           <div className={styles.filterSection}>
             <label>
-              <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} />
-              Only show available properties
+              <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} /> Only show available properties
             </label>
           </div>
           <div className={styles.filterSection}>
