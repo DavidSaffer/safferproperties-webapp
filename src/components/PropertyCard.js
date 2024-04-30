@@ -4,19 +4,15 @@ import styles from './CSS/PropertyCard.module.css'; // Ensure you have correspon
 
 function PropertyCard({ property, linkTo }) {
   const getRoomInfo = () => {
-    const bedroomsInfo = property.bedrooms
-      ? `${property.bedrooms} Bedrooms`
-      : '';
-    const bathroomsInfo = property.bathrooms
-      ? `${property.bathrooms} Bathrooms`
-      : '';
+    const bedroomsInfo = property.bedrooms ? `${property.bedrooms} Bedrooms` : '';
+    const bathroomsInfo = property.bathrooms ? `${property.bathrooms} Bathrooms` : '';
     const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
   };
 
   return (
-    <li className={styles.propertyCard}>
+    <div className={styles.propertyCard}>
       <Link to={linkTo}>
         <img src={property.thumbnail_image_url} alt="Thumbnail" />
         <div className={styles.propertyCardContent}>
@@ -25,7 +21,7 @@ function PropertyCard({ property, linkTo }) {
           <p>{property.thumbnail_description}</p>
         </div>
       </Link>
-    </li>
+    </div>
   );
 }
 

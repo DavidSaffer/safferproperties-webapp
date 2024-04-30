@@ -107,7 +107,7 @@ function PropertiesPage() {
         ) : (
           <motion.ul layout variants={containerVariants} initial="hidden" animate="visible" className={styles.propertiesList}>
             {filteredProperties.map(property => (
-              <motion.li key={property.id} variants={itemVariants}>
+              <motion.li key={property.id} variants={itemVariants} whileHover={{ scale: 1.05 }} transition={{ duration: 0.02 }}>
                 <PropertyCard property={property} linkTo={`/properties/${property.id}`} />
               </motion.li>
             ))}

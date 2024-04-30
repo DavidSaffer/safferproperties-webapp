@@ -21,8 +21,14 @@ function HomePage() {
       for (let id in data) {
         propertyList.push({ id, ...data[id] });
       }
-      // Setting properties to first three entries only
-      setProperties(propertyList.slice(0, 1));
+      // Names of the properties you want to feature
+      const featuredNames = ['2410 N Madison', '3171 Spring Street', '2223 N Nottingham Street'];
+
+      // Filter properties by names listed in featuredNames
+      const featuredProperties = propertyList.filter(property => featuredNames.includes(property.address));
+
+      // Set featured properties to state
+      setProperties(featuredProperties);
     });
   }, []);
 
@@ -47,8 +53,8 @@ function HomePage() {
               key={property.id}
               className={styles.propertyCard}
               initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 + properties.indexOf(property) * 0.2, type: 'spring', stiffness: 50 }}>
+              animate={{ opacity: 1, x: 0, transition: { delay: 0.5 + properties.indexOf(property) * 0.2, type: 'spring', stiffness: 50 } }}
+              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
               <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
             </motion.li>
           ))}
