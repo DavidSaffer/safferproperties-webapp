@@ -26,6 +26,7 @@ const About = () => {
       >
         About Us
       </motion.h1>
+      <div className={styles.aboutContent}>
       <motion.section
         className={styles.section}
         variants={sectionVariants}
@@ -92,6 +93,9 @@ const About = () => {
           </p>
         </div>
       </motion.section>
+
+      </div>
+      
     </div>
   );
 };
