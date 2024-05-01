@@ -47,6 +47,9 @@ const MyNavbar = () => {
             <Nav.Link as={NavLink} to="/properties" onClick={() => setExpanded(false)}>
               Properties
             </Nav.Link>
+            <Nav.Link as={NavLink} to="/new-construction" onClick={() => setExpanded(false)}>
+              New Construction
+            </Nav.Link>
             <Nav.Link as={NavLink} to="/about" onClick={() => setExpanded(false)}>
               About
             </Nav.Link>
@@ -57,9 +60,14 @@ const MyNavbar = () => {
               Rental Application
             </Nav.Link>
             {isAdmin && (
+              <>
               <Nav.Link as={NavLink} to="/addproperty" onClick={() => setExpanded(false)}>
                 Add Property
               </Nav.Link>
+              <Nav.Link as={NavLink} to="/addnewconstruction" onClick={() => setExpanded(false)}>
+                Add New Construction
+              </Nav.Link>
+              </>
             )}
             {/* {isAdmin && (
               <Nav.Link as={NavLink} to="/editproperties" onClick={() => setExpanded(false)}>

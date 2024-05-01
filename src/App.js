@@ -14,8 +14,12 @@ import PropertyDetail from './Pages/PropertyDetail.js';
 
 //Admin
 import AddProperty from './Pages/AdminPages/AddPropertyPage.js';
-import EditProperties from './Pages/AdminPages/EditPropertiesPage.js';
+import AddNewConstruction from './Pages/AdminPages/AddNewConstructionPage.js';
+//import EditProperties from './Pages/AdminPages/EditPropertiesPage.js';
 import EditPropertyDetails from './Pages/AdminPages/EditPropertyDetails.js';
+import ConstructionPage from './Pages/ConstructionPage.js';
+import ConstructionDetails from './Pages/ConstructionDetails.js';
+import EditConstructionDetails from './Pages/AdminPages/EditConstructionDetails.js';
 
 // User Auth
 // import { auth } from './index';
@@ -37,12 +41,17 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/properties" element={<Properties />} />
+            <Route path="/new-construction" element={<ConstructionPage />} />
             <Route path="/rental-application" element={<RentalApplication />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
+            <Route path="/new-construction/:id" element={<ConstructionDetails />} />
             {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
-            {isAdmin && <Route path="/editproperties" element={<EditProperties />} />}
+            {/* {isAdmin && <Route path="/editproperties" element={<EditProperties />} />} */}
+            {isAdmin && <Route path="/addnewconstruction" element={<AddNewConstruction />} />}
             {isAdmin && <Route path="/editproperties/:id" element={<EditPropertyDetails />} />}
+            {isAdmin && <Route path="/edit-construction/:id" element={<EditConstructionDetails />} />}
+
           </Routes>
         </Router>
       </div>

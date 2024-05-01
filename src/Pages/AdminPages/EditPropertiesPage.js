@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import styles from './CSS/EditPropertiesPage.module.css';
 
+import Swal from 'sweetalert2';
+
 function EditPropertiesPage() {
   const [properties, setProperties] = useState([]);
   const [filterAvailable, setFilterAvailable] = useState(false);
@@ -12,7 +14,14 @@ function EditPropertiesPage() {
   useEffect(() => {
     //console.log("Fetching data from Firebase");
     const propertiesRef = ref(database, 'properties/');
-    //console.log("propertiesRef:", propertiesRef); // Log the reference (optional
+    console.log("propertiesRef:", propertiesRef); // Log the reference (optional
+    if (!propertiesRef) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load property data',
+      });
+    }
     onValue(propertiesRef, snapshot => {
       const data = snapshot.val();
       //console.log("Data retrieved from Firebase:", data); // Log the raw data

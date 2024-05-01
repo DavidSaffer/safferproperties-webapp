@@ -14,14 +14,13 @@ import styles from './CSS/PropertyDetails.module.css';
 
 import Masonry from '@mui/lab/Masonry';
 
-function PropertyDetail() {
+function ConstructionDetails() {
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
   const detailsRef = useRef(null); // Reference to the details section
   const { id } = useParams();
-  console.log('id:', id);
   const [numColumns, setNumColumns] = useState(3);
 
   //const[user] = useAuthState(auth);
@@ -29,7 +28,7 @@ function PropertyDetail() {
 
   useEffect(() => {
     const propertyRef = ref(database);
-    get(child(propertyRef, `properties/${id}`))
+    get(child(propertyRef, `newConstruction/${id}`))
       .then(snapshot => {
         if (snapshot.exists()) {
           setProperty(snapshot.val());
@@ -170,7 +169,7 @@ function PropertyDetail() {
               <hr />
               <p>Admin Features</p>
               <div className={styles.buttonContainer}>
-                <button onClick={() => navigate(`/editproperties/${id}`)} className={styles.editButton}>
+                <button onClick={() => navigate(`/edit-construction/${id}`)} className={styles.editButton}>
                   Edit Property
                 </button>
                 {/* <Link to={`/editproperties/${id}`} className={styles.editButton}>
@@ -185,4 +184,4 @@ function PropertyDetail() {
   );
 }
 
-export default PropertyDetail;
+export default ConstructionDetails;
