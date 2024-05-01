@@ -38,7 +38,7 @@ function EditConstructionDetails() {
 
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'; // Reset height to ensure correct new height calculation
+      textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
@@ -66,7 +66,7 @@ function EditConstructionDetails() {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: `Failed to fetch construction details. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+          text: `Failed to fetch construction details. Please try again. Error: ${error.message}`,
           footer: 'If the problem persists, show this message to david.',
         });
       });
@@ -84,46 +84,64 @@ function EditConstructionDetails() {
     }));
   };
 
-  const handleImageUpload = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const timestamp = new Date().getTime();
-    const imageCount = formData.image_urls.length;
-    const fileName = `image_${timestamp}_${imageCount}.jpg`;
-    const newImageRef = storageRef(storage, `newConstruction/${id}/${fileName}`);
-
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+  
+    // Initialize the progress bar modal
+    Swal.fire({
+      title: 'Uploading...',
+      html: `<progress id="progress-bar" value="0" max="100" style="width: 100%"></progress>`,
+      allowOutsideClick: false,
+      showCancelButton: false,
+      showConfirmButton: false
+    });
+  
+    const progressBar = document.getElementById('progress-bar');
+  
     setLoading(true);
+    const newImageUrls = [...formData.image_urls];
+  
     try {
-      const snapshot = await uploadBytes(newImageRef, file);
-      const downloadURL = await getDownloadURL(snapshot.ref);
-      if (!downloadURL) {
-        throw new Error('Failed to get download URL');
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const timestamp = new Date().getTime();
+        const fileName = `image_${timestamp}_${newImageUrls.length}.jpg`;
+        const newImageRef = storageRef(storage, `newConstruction/${id}/${fileName}`);
+  
+        const snapshot = await uploadBytes(newImageRef, file);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        if (!downloadURL) {
+          throw new Error('Failed to get download URL');
+        }
+  
+        newImageUrls.push(downloadURL);
+  
+        // Update the progress bar
+        const progressPercentage = Math.round(((i + 1) / files.length) * 100);
+        progressBar.value = progressPercentage;
       }
-
-      // Update the local state with the new image URL
-      const newImageUrls = [...formData.image_urls, downloadURL];
+  
       const newThumbnailUrl = newImageUrls[0];
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         image_urls: newImageUrls,
         thumbnail_image_url: newThumbnailUrl,
       }));
-
-      // Update the Firebase Realtime Database
+  
       const constructionRef = ref(database, `newConstruction/${id}`);
       await update(constructionRef, {
         image_urls: newImageUrls,
         thumbnail_image_url: newThumbnailUrl,
       });
-
-      Swal.fire('Uploaded!', 'Your image has been uploaded.', 'success');
+  
+      Swal.fire('Uploaded!', 'Your images have been uploaded.', 'success');
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('Error uploading images:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: `Failed to add image. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
+        text: `Failed to add images. Please try again. Error: ${error.message}`,
         footer: 'If the problem persists, show this message to david.',
       });
     } finally {
@@ -261,7 +279,7 @@ function EditConstructionDetails() {
         remove(constructionRef)
           .then(() => {
             Swal.fire('Deleted!', 'Your construction has been deleted.', 'success');
-            navigate('/editconstructions');
+            navigate('/new-construction');
           })
           .catch(error => {
             Swal.fire({
@@ -325,9 +343,9 @@ function EditConstructionDetails() {
 
           <div>
             <label htmlFor="imageUpload" className={styles.label}>
-              Add Image:
+              Add Images:
             </label>
-            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" />
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" multiple />
           </div>
 
           <div>

@@ -103,51 +103,71 @@ function EditPropertyDetails() {
 
   // Add an image to storage, then also add the URL to the reltime databse
   // (this way if the user dosnt hit save, the image is still saved. this prevents images in storage but not in realtime database)
-  const handleImageUpload = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
+const handleImageUpload = async (e) => {
+  const files = Array.from(e.target.files); // Handle multiple files
+  if (files.length === 0) return;
 
-    const timestamp = new Date().getTime();
-    const imageCount = formData.image_urls.length;
-    const fileName = `image_${timestamp}_${imageCount}.jpg`;
-    const newImageRef = storageRef(storage, `properties/${id}/${fileName}`);
+  // Initialize the progress bar modal
+  Swal.fire({
+    title: 'Uploading...',
+    html: `<progress id="progress-bar" value="0" max="100" style="width: 100%"></progress>`,
+    allowOutsideClick: false,
+    showCancelButton: false,
+    showConfirmButton: false
+  });
 
-    setLoading(true);
-    try {
+  const progressBar = document.getElementById('progress-bar'); // Access progress bar element
+
+  const newImageUrls = [...formData.image_urls];
+  setLoading(true);
+
+  try {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const timestamp = new Date().getTime();
+      const fileName = `image_${timestamp}_${newImageUrls.length}.jpg`;
+      const newImageRef = storageRef(storage, `properties/${id}/${fileName}`);
+
       const snapshot = await uploadBytes(newImageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
       if (!downloadURL) {
         throw new Error('Failed to get download URL');
       }
-      // Update the local state with the new image URL
-      const newImageUrls = [...formData.image_urls, downloadURL];
-      const newThumbnailUrl = newImageUrls[0];
-      setFormData(prev => ({
-        ...prev,
-        image_urls: newImageUrls,
-        thumbnail_image_url: newThumbnailUrl,
-      }));
 
-      // Update the Firebase Realtime Database
-      const propertyRef = ref(database, `properties/${id}`);
-      await update(propertyRef, {
-        image_urls: newImageUrls,
-        thumbnail_image_url: newThumbnailUrl,
-      });
+      newImageUrls.push(downloadURL); // Add the new URL to the array
 
-      Swal.fire('Uploaded!', 'Your image has been uploaded.', 'success');
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: `Failed to add image. Please try again. Error: ${error.message}`, // Assuming error has a 'message' property
-        footer: 'If the problem persists, show this message to david.',
-      });
-    } finally {
-      setLoading(false);
+      // Update the progress bar
+      const progressPercentage = Math.round(((i + 1) / files.length) * 100);
+      progressBar.value = progressPercentage;
     }
-  };
+
+    const newThumbnailUrl = newImageUrls[0];
+    setFormData((prev) => ({
+      ...prev,
+      image_urls: newImageUrls,
+      thumbnail_image_url: newThumbnailUrl,
+    }));
+
+    const propertyRef = ref(database, `properties/${id}`);
+    await update(propertyRef, {
+      image_urls: newImageUrls,
+      thumbnail_image_url: newThumbnailUrl,
+    });
+
+    Swal.fire('Uploaded!', 'Your images have been uploaded.', 'success');
+  } catch (error) {
+    console.error('Error uploading images:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: `Failed to add images. Please try again. Error: ${error.message}`,
+      footer: 'If the problem persists, show this message to david.',
+    });
+  } finally {
+    setLoading(false);
+  }
+};
+  
 
   const handleRemoveImage = async index => {
     const url = formData.image_urls[index]; // Get the URL of the image to be removed
@@ -285,7 +305,7 @@ function EditPropertyDetails() {
         remove(propertyRef)
           .then(() => {
             Swal.fire('Deleted!', 'Your property has been deleted.', 'success');
-            navigate('/editproperties');
+            navigate('/properties');
           })
           .catch(error => {
             Swal.fire({
@@ -373,7 +393,7 @@ function EditPropertyDetails() {
             <label htmlFor="imageUpload" className={styles.label}>
               Add Image:
             </label>
-            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" />
+            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" multiple/>
           </div>
 
           <div>
