@@ -21,7 +21,6 @@ function PropertyDetail() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const detailsRef = useRef(null); // Reference to the details section
   const { id } = useParams();
-  console.log('id:', id);
   const [numColumns, setNumColumns] = useState(3);
 
   //const[user] = useAuthState(auth);
@@ -110,6 +109,47 @@ function PropertyDetail() {
     // Return the original price if it contains any characters other than numbers and a decimal point
     return price;
   };
+  
+  const toggleAvailability = () => {
+    const newAvailability = !property.currently_available;
+
+    // Update the state locally first
+    setProperty(prevProperty => ({
+      ...prevProperty,
+      currently_available: newAvailability,
+    }));
+
+    // Construct the path to the property data in Firebase
+    const propertyRef = ref(database, `properties/${id}`);
+
+    // Update the property in Firebase
+    update(propertyRef, { currently_available: newAvailability })
+      .then(() => {
+        console.log('Property availability updated successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Property availability has been successfully updated.',
+          timer: 3000, //close automatically after 3 seconds
+          timerProgressBar: true,
+        });
+      })
+      .catch(error => {
+        console.error('Failed to update property availability:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Update',
+          text: `Could not update property availability in the database.Please try again. Error: ${error.message}`,
+          footer: 'If the problem persists, show this message to david.',
+        });
+
+        // Revert state change if the database update fails
+        setProperty(prevProperty => ({
+          ...prevProperty,
+          currently_available: !newAvailability,
+        }));
+      });
+  };
 
   const getDescriptionList = description => {
     return description.split(/(?:\.{2,}|\n+)/).map(
@@ -170,6 +210,9 @@ function PropertyDetail() {
               <hr />
               <p>Admin Features</p>
               <div className={styles.buttonContainer}>
+                <button onClick={toggleAvailability} className={styles.editButton}>
+                  Toggle Availability
+                </button>
                 <button onClick={() => navigate(`/editproperties/${id}`)} className={styles.editButton}>
                   Edit Property
                 </button>
