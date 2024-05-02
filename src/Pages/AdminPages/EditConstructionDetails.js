@@ -24,6 +24,7 @@ function EditConstructionDetails() {
     image_urls: [],
     bedrooms: '',
     bathrooms: '',
+    property_type: 'Residential',
   });
   const { id } = useParams();
   const textareaRef = useRef(null);
@@ -56,6 +57,7 @@ function EditConstructionDetails() {
             image_urls: data.image_urls || [],
             bedrooms: data.bedrooms || '',
             bathrooms: data.bathrooms || '',
+            property_type: data.property_type || 'Residential',
           });
         } else {
           console.log('No data available');
@@ -335,6 +337,15 @@ function EditConstructionDetails() {
             </label>
             <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className={styles.input} />
           </div>
+
+          <label htmlFor="property_type" className={styles.label}>
+            Property Type:
+          </label>
+          <select name="property_type" value={formData.property_type} onChange={handleInputChange} className={styles.select}>
+            <option value="Residential">Residential</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Vacation">Vacation</option>
+          </select>
 
           <label htmlFor="thumbnail_description" className={styles.label}>
             Thumbnail Description:
