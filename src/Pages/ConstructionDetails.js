@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ref, get, child, update } from 'firebase/database';
+import { useParams } from 'react-router-dom';
+import { ref, get, child } from 'firebase/database';
 import { database } from '../index.js';
 import Lightbox from 'react-18-image-lightbox';
 import 'react-18-image-lightbox/style.css';
@@ -94,21 +94,6 @@ function ConstructionDetails() {
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
   };
 
-  const convertPriceToCurrency = price => {
-    // Regular expression to check if the price is only numbers and at most one decimal point
-    if (/^\d*\.?\d*$/.test(price)) {
-      const newPrice = parseFloat(price);
-      if (!isNaN(newPrice)) {
-        return newPrice.toLocaleString('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          minimumFractionDigits: 0,
-        });
-      }
-    }
-    // Return the original price if it contains any characters other than numbers and a decimal point
-    return price;
-  };
 
   const getDescriptionList = description => {
     return description.split(/(?:\.{2,}|\n+)/).map(
@@ -156,13 +141,6 @@ function ConstructionDetails() {
           <h2>{property.address}</h2>
           {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          {property.currently_available && <p>Price: {convertPriceToCurrency(property.price)}</p>}
-          <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
-          {property.currently_available && ( // Check if property is available
-            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`} className={styles.applyButton}>
-              Apply Now
-            </Link>
-          )}
           
           {isAdmin && (
             <>
