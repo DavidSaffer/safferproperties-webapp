@@ -34,7 +34,7 @@ const MyNavbar = () => {
 
   return (
     <Navbar bg="dark" variant="dark" sticky="top" expand="xl" expanded={expanded}>
-      <Container fluid>
+      <Container fluid="md">
         <Navbar.Brand as={NavLink} to="/" onClick={() => setExpanded(false)}>
           <img src={logo} style={{ maxWidth: '80px' }} alt="logo" />
         </Navbar.Brand>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../index.js';
-import { useLocation } from 'react-router-dom';
 
 import PropertyCard from '../components/PropertyCard';
 
@@ -10,15 +9,13 @@ import styles from './CSS/PropertiesPage.module.css';
 import { motion } from 'framer-motion';
 
 function ConstructionPage() {
-  const location = useLocation(); // Access location object from react-router-dom
-  const queryParams = new URLSearchParams(location.search); // Get query parameters from URL
-  const filterAvailableParam = queryParams.get('filter');
 
   const [properties, setProperties] = useState([]);
-  const [filterAvailable, setFilterAvailable] = useState(filterAvailableParam === 'available');
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const filterPropertyTypeFromStorage = sessionStorage.getItem('constructionSelectedPropertyType') || '';
 
   const headerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -66,10 +63,13 @@ function ConstructionPage() {
     setIsLoading(false);
   }, []);
 
+  // Load selected property type from session storage
+  useEffect(() => {
+    setSelectedPropertyType(filterPropertyTypeFromStorage);
+  }, [filterPropertyTypeFromStorage]);
+
+
   const filteredProperties = properties.filter(property => {
-    if (filterAvailable && !property.currently_available) {
-      return false;
-    }
     if (selectedPropertyType && property.property_type !== selectedPropertyType) {
       return false;
     }
@@ -78,6 +78,7 @@ function ConstructionPage() {
 
   const handlePropertyTypeChange = event => {
     setSelectedPropertyType(event.target.value);
+    sessionStorage.setItem('constructionSelectedPropertyType', event.target.value);
   };
 
   return (

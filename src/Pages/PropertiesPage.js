@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../index.js';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PropertyCard from '../components/PropertyCard';
 
@@ -10,14 +10,17 @@ import styles from './CSS/PropertiesPage.module.css';
 import { motion } from 'framer-motion';
 
 function PropertiesPage() {
-  const location = useLocation(); // Access location object from react-router-dom
-  const queryParams = new URLSearchParams(location.search); // Get query parameters from URL
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
   const filterAvailableParam = queryParams.get('filter');
 
-  const [properties, setProperties] = useState([]);
-  const [filterAvailable, setFilterAvailable] = useState(filterAvailableParam === 'available');
-  const [selectedPropertyType, setSelectedPropertyType] = useState('');
+  const filterAvailableFromStorage = sessionStorage.getItem('filterAvailable') === 'true';
+  const selectedPropertyTypeFromStorage = sessionStorage.getItem('selectedPropertyType') || '';
 
+  const [properties, setProperties] = useState([]);
+  const [filterAvailable, setFilterAvailable] = useState(filterAvailableFromStorage);
+  const [selectedPropertyType, setSelectedPropertyType] = useState(selectedPropertyTypeFromStorage);
   const [isLoading, setIsLoading] = useState(true);
 
   const headerVariants = {
@@ -66,6 +69,21 @@ function PropertiesPage() {
     setIsLoading(false);
   }, []);
 
+  // Update filters based on query params or session storage
+  useEffect(() => {
+    if (filterAvailableParam !== null) {
+      setFilterAvailable(filterAvailableParam === 'available');
+      sessionStorage.setItem('filterAvailable', (filterAvailableParam === 'available').toString());
+      setSelectedPropertyType('');
+      sessionStorage.setItem('selectedPropertyType', '');
+    } else {
+      const filterAvailableFromStorage = sessionStorage.getItem('filterAvailable') === 'true';
+      setFilterAvailable(filterAvailableFromStorage);
+      const propertyTypeFromStorage = sessionStorage.getItem('selectedPropertyType') || '';
+      setSelectedPropertyType(propertyTypeFromStorage);
+    }
+  }, [filterAvailableParam]);
+
   const filteredProperties = properties.filter(property => {
     if (filterAvailable && !property.currently_available) {
       return false;
@@ -77,7 +95,17 @@ function PropertiesPage() {
   });
 
   const handlePropertyTypeChange = event => {
-    setSelectedPropertyType(event.target.value);
+    const newPropertyType = event.target.value;
+    setSelectedPropertyType(newPropertyType);
+    sessionStorage.setItem('selectedPropertyType', newPropertyType);
+    navigate('/properties'); // Update the URL without parameters
+  };
+
+  const handleFilterChange = () => {
+    const newFilterAvailable = !filterAvailable;
+    setFilterAvailable(newFilterAvailable);
+    sessionStorage.setItem('filterAvailable', newFilterAvailable.toString());
+    navigate('/properties'); // Update the URL without parameters
   };
 
   return (
@@ -89,7 +117,7 @@ function PropertiesPage() {
         <motion.div variants={headerVariants} initial="hidden" animate="visible">
           <div className={styles.filterSection}>
             <label>
-              <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} /> Only show available properties
+              <input type="checkbox" checked={filterAvailable} onChange={handleFilterChange} /> Only show available properties
             </label>
           </div>
           <div className={styles.filterSection}>
