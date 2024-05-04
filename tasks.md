@@ -1,0 +1,3 @@
+- [ ] (first click "currentley available" on home) After changing the property filter, the url should change
+- [ ] Add local storage to remember the property filters
+- [ ] Login dropdown causes the page to overflow
