@@ -95,6 +95,12 @@ const Contact = () => {
               stephaniesaffer@vt.edu
             </a>
           </p>
+          <p>
+            Phone:{' '}
+            <a href="tel:+17038351019" className={styles.phone}>
+              703-835-1019
+            </a>
+          </p>
         </motion.div>
       </motion.div>
     </div>
