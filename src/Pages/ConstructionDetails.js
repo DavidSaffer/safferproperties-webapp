@@ -66,7 +66,6 @@ function ConstructionDetails() {
 
   const updateColumns = () => {
     const width = window.innerWidth;
-    console.log('Window width:', width);
     // Here you define how you determine the number of columns based on width
     // This is a simple example that sets more columns for wider screens
     if (width >= 2000) {

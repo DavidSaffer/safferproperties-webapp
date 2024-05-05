@@ -30,7 +30,6 @@ import { useAuth } from './AuthContext.js';
 
 function App() {
   const { isAdmin } = useAuth();
-  console.log('isAdmin:', isAdmin);
 
   return (
     <>

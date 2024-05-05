@@ -56,13 +56,18 @@ function PropertyDetail() {
   }, [id, navigate]);
 
 
-  useEffect(() => {
-    // Update max-height of details section after property data is loaded
-    if (property) {
-      const detailsHeight = detailsRef.current.scrollHeight;
-      detailsRef.current.style.maxHeight = `${detailsHeight}px`;
-    }
-  }, [property]);
+  // const adjustTextareaHeight = () => {
+  //   if (detailsRef.current) {
+  //     detailsRef.current.style.height = 'auto';
+  //     detailsRef.current.style.height = `${detailsRef.current.scrollHeight}px`;
+  //     console.log('Textarea height:', detailsRef.current.scrollHeight)
+  //   }
+  // };
+
+
+  // useEffect(() => {
+  //   adjustTextareaHeight();
+  // }, [detailsRef, property]);
 
   const updateColumns = () => {
     const width = window.innerWidth;
