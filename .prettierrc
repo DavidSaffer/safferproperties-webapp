@@ -5,7 +5,7 @@
     "trailingComma": "es5",
     "jsxSingleQuote": false,
     "arrowParens": "avoid",
-    "printWidth": 200,
+    "printWidth": 80,
     "bracketSameLine": true,
     "proseWrap": "preserve",
     "htmlWhitespaceSensitivity": "css"

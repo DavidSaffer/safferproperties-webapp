@@ -21,6 +21,8 @@ import ConstructionPage from './Pages/ConstructionPage.js';
 import ConstructionDetails from './Pages/ConstructionDetails.js';
 import EditConstructionDetails from './Pages/AdminPages/EditConstructionDetails.js';
 
+import BlogPage from './Pages/BlogPage.js';
+
 // User Auth
 // import { auth } from './index';
 // import { database } from './index';
@@ -45,6 +47,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
             <Route path="/new-construction/:id" element={<ConstructionDetails />} />
+            <Route path="/blog" element={<BlogPage />} />
             {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
             {/* {isAdmin && <Route path="/editproperties" element={<EditProperties />} />} */}
             {isAdmin && <Route path="/addnewconstruction" element={<AddNewConstruction />} />}

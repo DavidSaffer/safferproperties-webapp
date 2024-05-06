@@ -33,40 +33,76 @@ const MyNavbar = () => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" sticky="top" expand="xl" expanded={expanded}>
+    <Navbar
+      bg="dark"
+      variant="dark"
+      sticky="top"
+      expand="xl"
+      expanded={expanded}>
       <Container fluid="md">
         <Navbar.Brand as={NavLink} to="/" onClick={() => setExpanded(false)}>
           <img src={logo} style={{ maxWidth: '80px' }} alt="logo" />
         </Navbar.Brand>
-        <Navbar.Toggle onClick={() => setExpanded(expanded => !expanded)} aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle
+          onClick={() => setExpanded(expanded => !expanded)}
+          aria-controls="responsive-navbar-nav"
+        />
         <Navbar.Collapse id="justify-content-end">
           <Nav className="me-auto">
             <Nav.Link as={NavLink} to="/" onClick={() => setExpanded(false)}>
               Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/properties" onClick={() => setExpanded(false)}>
+            <Nav.Link
+              as={NavLink}
+              to="/properties"
+              onClick={() => setExpanded(false)}>
               Properties
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/new-construction" onClick={() => setExpanded(false)}>
+            <Nav.Link
+              as={NavLink}
+              to="/new-construction"
+              onClick={() => setExpanded(false)}>
               New Construction
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/about" onClick={() => setExpanded(false)}>
+            <Nav.Link
+              as={NavLink}
+              to="/about"
+              onClick={() => setExpanded(false)}>
               About
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/contact" onClick={() => setExpanded(false)}>
+            <Nav.Link
+              as={NavLink}
+              to="/contact"
+              onClick={() => setExpanded(false)}>
               Contact
             </Nav.Link>
-            <Nav.Link as={NavLink} to="/rental-application" onClick={() => setExpanded(false)}>
+            <Nav.Link
+              as={NavLink}
+              to="/blog"
+              onClick={() => setExpanded(false)}>
+              Blog
+            </Nav.Link>
+            <Nav.Link
+              as={NavLink}
+              to="/rental-application"
+              onClick={() => setExpanded(false)}>
               Rental Application
             </Nav.Link>
+
             {isAdmin && (
               <>
-              <Nav.Link as={NavLink} to="/addproperty" onClick={() => setExpanded(false)}>
-                Add Property
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/addnewconstruction" onClick={() => setExpanded(false)}>
-                Add New Construction
-              </Nav.Link>
+                <Nav.Link
+                  as={NavLink}
+                  to="/addproperty"
+                  onClick={() => setExpanded(false)}>
+                  Add Property
+                </Nav.Link>
+                <Nav.Link
+                  as={NavLink}
+                  to="/addnewconstruction"
+                  onClick={() => setExpanded(false)}>
+                  Add New Construction
+                </Nav.Link>
               </>
             )}
             {/* {isAdmin && (
@@ -79,7 +115,9 @@ const MyNavbar = () => {
           <Nav className="ms-auto">
             {user ? (
               <>
-                <NavDropdown title={user.displayName || 'User'} id="collasible-nav-dropdown">
+                <NavDropdown
+                  title={user.displayName || 'User'}
+                  id="collasible-nav-dropdown">
                   {isAdmin && <NavDropdown.Header>Admin</NavDropdown.Header>}
                   <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                 </NavDropdown>
