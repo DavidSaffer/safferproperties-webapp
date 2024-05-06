@@ -1,12 +1,11 @@
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 
-// Initialize the Firebase Admin SDK as previously done
 admin.initializeApp({
-  credential: admin.credential.cert("./serviceAccountKey.json"),
-  databaseURL: "https://safferproperties-6bead-default-rtdb.firebaseio.com"
+  credential: admin.credential.cert('./serviceAccountKey.json'),
+  databaseURL: 'https://safferproperties-6bead-default-rtdb.firebaseio.com',
 });
 
-const uid = "";
+const uid = '';
 
 // Remove the 'admin' custom claim from the specified user
 admin
@@ -15,6 +14,6 @@ admin
   .then(() => {
     console.log(`Admin claim removed from ${uid}`);
   })
-  .catch((error) => {
-    console.error("Error removing admin claim:", error);
+  .catch(error => {
+    console.error('Error removing admin claim:', error);
   });
