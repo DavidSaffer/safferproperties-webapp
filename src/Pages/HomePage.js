@@ -22,10 +22,16 @@ function HomePage() {
         propertyList.push({ id, ...data[id] });
       }
       // Names of the properties you want to feature
-      const featuredNames = ['1111 Karens Way Corolla, NC', '3171 Spring Street Fairfax, VA ', '3415 N. Pershing Drive'];
+      const featuredNames = [
+        '1111 Karens Way Corolla, NC',
+        '3171 Spring Street Fairfax, VA ',
+        '3415 N. Pershing Drive',
+      ];
 
       // Filter properties by names listed in featuredNames
-      const featuredProperties = propertyList.filter(property => featuredNames.includes(property.address));
+      const featuredProperties = propertyList.filter(property =>
+        featuredNames.includes(property.address)
+      );
 
       // Set featured properties to state
       setProperties(featuredProperties);
@@ -38,11 +44,26 @@ function HomePage() {
   };
 
   return (
-    <motion.div className={styles.container} initial="hidden" animate="visible" variants={containerVariants}>
+    <motion.div
+      className={styles.container}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}>
       <div className={styles.heroSection}>
-        <motion.img src={logo} alt="Company Logo" className={styles.logo} initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, type: 'spring', stiffness: 120 }} />
-        <Link to="/properties?filter=available" style={{ textDecoration: 'none' }}>
-          <button className={styles.ctaButton}>Currently Available Properties</button>
+        <motion.img
+          src={logo}
+          alt="Company Logo"
+          className={styles.logo}
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, type: 'spring', stiffness: 120 }}
+        />
+        <Link
+          to="/properties?filter=available"
+          style={{ textDecoration: 'none' }}>
+          <button className={styles.ctaButton}>
+            Currently Available Properties
+          </button>
         </Link>
       </div>
       <div className={styles.featureSection}>
@@ -53,9 +74,21 @@ function HomePage() {
               key={property.id}
               className={styles.propertyCard}
               initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0, transition: { delay: 0.5 + properties.indexOf(property) * 0.2, type: 'spring', stiffness: 50 } }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                transition: {
+                  delay: 0.5 + properties.indexOf(property) * 0.2,
+                  type: 'spring',
+                  stiffness: 50,
+                },
+              }}
               whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
-              <PropertyCard key={property.id} property={property} linkTo={`/properties/${property.id}`} />
+              <PropertyCard
+                key={property.id}
+                property={property}
+                linkTo={`/properties/${property.id}`}
+              />
             </motion.li>
           ))}
         </div>

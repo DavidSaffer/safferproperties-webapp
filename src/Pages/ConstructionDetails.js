@@ -55,7 +55,6 @@ function ConstructionDetails() {
       });
   }, [id, navigate]);
 
-
   useEffect(() => {
     // Update max-height of details section after property data is loaded
     if (property) {
@@ -86,13 +85,16 @@ function ConstructionDetails() {
   }, []);
 
   const getRoomInfo = () => {
-    const bedroomsInfo = property.bedrooms ? `${property.bedrooms} Bedrooms` : '';
-    const bathroomsInfo = property.bathrooms ? `${property.bathrooms} Bathrooms` : '';
+    const bedroomsInfo = property.bedrooms
+      ? `${property.bedrooms} Bedrooms`
+      : '';
+    const bathroomsInfo = property.bathrooms
+      ? `${property.bathrooms} Bathrooms`
+      : '';
     const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
   };
-
 
   const getDescriptionList = description => {
     return description.split(/(?:\.{2,}|\n+)/).map(
@@ -118,7 +120,13 @@ function ConstructionDetails() {
           {property.image_urls && property.image_urls.length > 0 ? (
             <Masonry columns={numColumns} spacing={2}>
               {property.image_urls.map((url, index) => (
-                <img key={index} src={url} alt={`Property ${index}`} className={styles.image} onClick={() => openLightbox(index)} />
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Property ${index}`}
+                  className={styles.image}
+                  onClick={() => openLightbox(index)}
+                />
               ))}
             </Masonry>
           ) : (
@@ -128,11 +136,25 @@ function ConstructionDetails() {
         {isOpen && (
           <Lightbox
             mainSrc={property.image_urls[photoIndex]}
-            nextSrc={property.image_urls[(photoIndex + 1) % property.image_urls.length]}
-            prevSrc={property.image_urls[(photoIndex + property.image_urls.length - 1) % property.image_urls.length]}
+            nextSrc={
+              property.image_urls[(photoIndex + 1) % property.image_urls.length]
+            }
+            prevSrc={
+              property.image_urls[
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              ]
+            }
             onCloseRequest={() => setIsOpen(false)}
-            onMovePrevRequest={() => setPhotoIndex((photoIndex + property.image_urls.length - 1) % property.image_urls.length)}
-            onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % property.image_urls.length)}
+            onMovePrevRequest={() =>
+              setPhotoIndex(
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              )
+            }
+            onMoveNextRequest={() =>
+              setPhotoIndex((photoIndex + 1) % property.image_urls.length)
+            }
             reactModalStyle={{ overlay: { zIndex: 9999 } }} // Set the zIndex to a high value
           />
         )}
@@ -140,13 +162,15 @@ function ConstructionDetails() {
           <h2>{property.address}</h2>
           {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          
+
           {isAdmin && (
             <>
               <hr />
               <p>Admin Features</p>
               <div className={styles.buttonContainer}>
-                <button onClick={() => navigate(`/edit-construction/${id}`)} className={styles.editButton}>
+                <button
+                  onClick={() => navigate(`/edit-construction/${id}`)}
+                  className={styles.editButton}>
                   Edit Property
                 </button>
                 {/* <Link to={`/editproperties/${id}`} className={styles.editButton}>

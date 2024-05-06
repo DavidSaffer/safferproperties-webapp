@@ -14,7 +14,7 @@ function EditPropertiesPage() {
   useEffect(() => {
     //console.log("Fetching data from Firebase");
     const propertiesRef = ref(database, 'properties/');
-    console.log("propertiesRef:", propertiesRef); // Log the reference (optional
+    console.log('propertiesRef:', propertiesRef); // Log the reference (optional
     if (!propertiesRef) {
       Swal.fire({
         icon: 'error',
@@ -33,14 +33,20 @@ function EditPropertiesPage() {
     });
   }, []);
 
-  const filteredProperties = filterAvailable ? properties.filter(property => property.currently_available) : properties;
+  const filteredProperties = filterAvailable
+    ? properties.filter(property => property.currently_available)
+    : properties;
 
   return (
     <div className={styles.container}>
       <h1>Edit Properties</h1>
       <div className={styles.filterSection}>
         <label>
-          <input type="checkbox" checked={filterAvailable} onChange={() => setFilterAvailable(!filterAvailable)} />
+          <input
+            type="checkbox"
+            checked={filterAvailable}
+            onChange={() => setFilterAvailable(!filterAvailable)}
+          />
           &nbsp;Only show available properties
         </label>
       </div>

@@ -55,7 +55,6 @@ function PropertyDetail() {
       });
   }, [id, navigate]);
 
-
   // const adjustTextareaHeight = () => {
   //   if (detailsRef.current) {
   //     detailsRef.current.style.height = 'auto';
@@ -63,7 +62,6 @@ function PropertyDetail() {
   //     console.log('Textarea height:', detailsRef.current.scrollHeight)
   //   }
   // };
-
 
   // useEffect(() => {
   //   adjustTextareaHeight();
@@ -92,8 +90,12 @@ function PropertyDetail() {
   }, []);
 
   const getRoomInfo = () => {
-    const bedroomsInfo = property.bedrooms ? `${property.bedrooms} Bedrooms` : '';
-    const bathroomsInfo = property.bathrooms ? `${property.bathrooms} Bathrooms` : '';
+    const bedroomsInfo = property.bedrooms
+      ? `${property.bedrooms} Bedrooms`
+      : '';
+    const bathroomsInfo = property.bathrooms
+      ? `${property.bathrooms} Bathrooms`
+      : '';
     const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';
@@ -114,7 +116,7 @@ function PropertyDetail() {
     // Return the original price if it contains any characters other than numbers and a decimal point
     return price;
   };
-  
+
   const toggleAvailability = () => {
     const newAvailability = !property.currently_available;
 
@@ -180,7 +182,13 @@ function PropertyDetail() {
           {property.image_urls && property.image_urls.length > 0 ? (
             <Masonry columns={numColumns} spacing={2}>
               {property.image_urls.map((url, index) => (
-                <img key={index} src={url} alt={`Property ${index}`} className={styles.image} onClick={() => openLightbox(index)} />
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Property ${index}`}
+                  className={styles.image}
+                  onClick={() => openLightbox(index)}
+                />
               ))}
             </Masonry>
           ) : (
@@ -190,11 +198,25 @@ function PropertyDetail() {
         {isOpen && (
           <Lightbox
             mainSrc={property.image_urls[photoIndex]}
-            nextSrc={property.image_urls[(photoIndex + 1) % property.image_urls.length]}
-            prevSrc={property.image_urls[(photoIndex + property.image_urls.length - 1) % property.image_urls.length]}
+            nextSrc={
+              property.image_urls[(photoIndex + 1) % property.image_urls.length]
+            }
+            prevSrc={
+              property.image_urls[
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              ]
+            }
             onCloseRequest={() => setIsOpen(false)}
-            onMovePrevRequest={() => setPhotoIndex((photoIndex + property.image_urls.length - 1) % property.image_urls.length)}
-            onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % property.image_urls.length)}
+            onMovePrevRequest={() =>
+              setPhotoIndex(
+                (photoIndex + property.image_urls.length - 1) %
+                  property.image_urls.length
+              )
+            }
+            onMoveNextRequest={() =>
+              setPhotoIndex((photoIndex + 1) % property.image_urls.length)
+            }
             reactModalStyle={{ overlay: { zIndex: 9999 } }} // Set the zIndex to a high value
           />
         )}
@@ -202,23 +224,34 @@ function PropertyDetail() {
           <h2>{property.address}</h2>
           {getRoomInfo() && <p>{getRoomInfo()}</p>}
           <ul>{getDescriptionList(property.description)}</ul>
-          {property.currently_available && <p>Price: {convertPriceToCurrency(property.price)}</p>}
-          <p>Status: {property.currently_available ? 'Available' : 'Not Available'}</p>
+          {property.currently_available && (
+            <p>Price: {convertPriceToCurrency(property.price)}</p>
+          )}
+          <p>
+            Status:{' '}
+            {property.currently_available ? 'Available' : 'Not Available'}
+          </p>
           {property.currently_available && ( // Check if property is available
-            <Link to={`/rental-application?address=${encodeURIComponent(property.address)}`} className={styles.applyButton}>
+            <Link
+              to={`/rental-application?address=${encodeURIComponent(property.address)}`}
+              className={styles.applyButton}>
               Apply Now
             </Link>
           )}
-          
+
           {isAdmin && (
             <>
               <hr />
               <p>Admin Features</p>
               <div className={styles.buttonContainer}>
-                <button onClick={toggleAvailability} className={styles.editButton}>
+                <button
+                  onClick={toggleAvailability}
+                  className={styles.editButton}>
                   Toggle Availability
                 </button>
-                <button onClick={() => navigate(`/editproperties/${id}`)} className={styles.editButton}>
+                <button
+                  onClick={() => navigate(`/editproperties/${id}`)}
+                  className={styles.editButton}>
                   Edit Property
                 </button>
                 {/* <Link to={`/editproperties/${id}`} className={styles.editButton}>

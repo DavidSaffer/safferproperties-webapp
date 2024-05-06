@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { ref, get, update, remove } from 'firebase/database';
-import { uploadBytes, ref as storageRef, getDownloadURL } from 'firebase/storage';
+import {
+  uploadBytes,
+  ref as storageRef,
+  getDownloadURL,
+} from 'firebase/storage';
 import { deleteObject } from 'firebase/storage';
 import { storage, database } from '../../index.js';
 import styles from './CSS/EditPropertyDetails.module.css';
@@ -9,8 +13,21 @@ import styles from './CSS/EditPropertyDetails.module.css';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, MouseSensor } from '@dnd-kit/core';
-import { arrayMove, SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  MouseSensor,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 
 import { SortableItem } from '../../components/SortableItemComponent.js';
 
@@ -86,57 +103,60 @@ function EditConstructionDetails() {
     }));
   };
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = async e => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
-  
+
     // Initialize the progress bar modal
     Swal.fire({
       title: 'Uploading...',
       html: `<progress id="progress-bar" value="0" max="100" style="width: 100%"></progress>`,
       allowOutsideClick: false,
       showCancelButton: false,
-      showConfirmButton: false
+      showConfirmButton: false,
     });
-  
+
     const progressBar = document.getElementById('progress-bar');
-  
+
     setLoading(true);
     const newImageUrls = [...formData.image_urls];
-  
+
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const timestamp = new Date().getTime();
         const fileName = `image_${timestamp}_${newImageUrls.length}.jpg`;
-        const newImageRef = storageRef(storage, `newConstruction/${id}/${fileName}`);
-  
+        const newImageRef = storageRef(
+          storage,
+          `newConstruction/${id}/${fileName}`
+        );
+
         const snapshot = await uploadBytes(newImageRef, file);
         const downloadURL = await getDownloadURL(snapshot.ref);
         if (!downloadURL) {
           throw new Error('Failed to get download URL');
         }
-  
+
         newImageUrls.push(downloadURL);
-  
+
         // Update the progress bar
         const progressPercentage = Math.round(((i + 1) / files.length) * 100);
         progressBar.value = progressPercentage;
       }
-  
+
       const newThumbnailUrl = newImageUrls[0];
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         image_urls: newImageUrls,
         thumbnail_image_url: newThumbnailUrl,
       }));
-  
+
       const constructionRef = ref(database, `newConstruction/${id}`);
       await update(constructionRef, {
         image_urls: newImageUrls,
         thumbnail_image_url: newThumbnailUrl,
       });
-  
+
       Swal.fire('Uploaded!', 'Your images have been uploaded.', 'success');
     } catch (error) {
       console.error('Error uploading images:', error);
@@ -169,8 +189,11 @@ function EditConstructionDetails() {
         const imageRef = storageRef(storage, imagePath);
         try {
           await deleteObject(imageRef);
-          const newImageUrls = formData.image_urls.filter((_, i) => i !== index);
-          const newThumbnailUrl = newImageUrls.length > 0 ? newImageUrls[0] : null;
+          const newImageUrls = formData.image_urls.filter(
+            (_, i) => i !== index
+          );
+          const newThumbnailUrl =
+            newImageUrls.length > 0 ? newImageUrls[0] : null;
           setFormData(prevFormData => ({
             ...prevFormData,
             image_urls: newImageUrls,
@@ -209,7 +232,8 @@ function EditConstructionDetails() {
   const handleSave = async () => {
     setLoading(true);
     const constructionRef = ref(database, `newConstruction/${id}`);
-    formData.thumbnail_image_url = formData.image_urls.length > 0 ? formData.image_urls[0] : null;
+    formData.thumbnail_image_url =
+      formData.image_urls.length > 0 ? formData.image_urls[0] : null;
     await update(constructionRef, formData)
       .then(() => {
         console.log('Data updated successfully!');
@@ -280,7 +304,11 @@ function EditConstructionDetails() {
         // Delete construction from database
         remove(constructionRef)
           .then(() => {
-            Swal.fire('Deleted!', 'Your construction has been deleted.', 'success');
+            Swal.fire(
+              'Deleted!',
+              'Your construction has been deleted.',
+              'success'
+            );
             navigate('/new-construction');
           })
           .catch(error => {
@@ -307,10 +335,20 @@ function EditConstructionDetails() {
       <h1>Edit Construction Details</h1>
       <div className={styles.container}>
         <div className={styles.imageGallery}>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={formData.image_urls} strategy={verticalListSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}>
+            <SortableContext
+              items={formData.image_urls}
+              strategy={verticalListSortingStrategy}>
               {formData.image_urls.map((url, index) => (
-                <SortableItem key={index} id={index} src={url} onRemove={() => handleRemoveImage(index)} />
+                <SortableItem
+                  key={index}
+                  id={index}
+                  src={url}
+                  onRemove={() => handleRemoveImage(index)}
+                />
               ))}
             </SortableContext>
           </DndContext>
@@ -319,29 +357,57 @@ function EditConstructionDetails() {
           <label htmlFor="address" className={styles.label}>
             Address:
           </label>
-          <input type="text" name="address" value={formData.address} onChange={handleInputChange} className={styles.input} />
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            className={styles.input}
+          />
 
           <label htmlFor="description" className={styles.label}>
             Description:
           </label>
-          <textarea ref={textareaRef} name="description" value={formData.description} onChange={handleInputChange} className={styles.textarea} />
+          <textarea
+            ref={textareaRef}
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+            className={styles.textarea}
+          />
 
           <div>
             <label htmlFor="bedrooms" className={styles.label}>
               Bedrooms:
             </label>
-            <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} className={styles.input} />
+            <input
+              type="number"
+              name="bedrooms"
+              value={formData.bedrooms}
+              onChange={handleInputChange}
+              className={styles.input}
+            />
 
             <label htmlFor="bathrooms" className={styles.label}>
               Bathrooms:
             </label>
-            <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} className={styles.input} />
+            <input
+              type="number"
+              name="bathrooms"
+              value={formData.bathrooms}
+              onChange={handleInputChange}
+              className={styles.input}
+            />
           </div>
 
           <label htmlFor="property_type" className={styles.label}>
             Property Type:
           </label>
-          <select name="property_type" value={formData.property_type} onChange={handleInputChange} className={styles.select}>
+          <select
+            name="property_type"
+            value={formData.property_type}
+            onChange={handleInputChange}
+            className={styles.select}>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
             <option value="Vacation">Vacation</option>
@@ -350,20 +416,38 @@ function EditConstructionDetails() {
           <label htmlFor="thumbnail_description" className={styles.label}>
             Thumbnail Description:
           </label>
-          <textarea name="thumbnail_description" value={formData.thumbnail_description} onChange={handleInputChange} className={styles.textarea}></textarea>
+          <textarea
+            name="thumbnail_description"
+            value={formData.thumbnail_description}
+            onChange={handleInputChange}
+            className={styles.textarea}></textarea>
 
           <div>
             <label htmlFor="imageUpload" className={styles.label}>
               Add Images:
             </label>
-            <input type="file" id="imageUpload" onChange={handleImageUpload} disabled={loading} className={styles.input} accept="image/*" multiple />
+            <input
+              type="file"
+              id="imageUpload"
+              onChange={handleImageUpload}
+              disabled={loading}
+              className={styles.input}
+              accept="image/*"
+              multiple
+            />
           </div>
 
           <div>
-            <button onClick={handleSave} disabled={loading} className={styles.button}>
+            <button
+              onClick={handleSave}
+              disabled={loading}
+              className={styles.button}>
               {loading ? 'Saving...' : 'Save'}
             </button>
-            <button onClick={handleDelete} disabled={loading} className={styles.button}>
+            <button
+              onClick={handleDelete}
+              disabled={loading}
+              className={styles.button}>
               {loading ? 'Deleting...' : 'Delete'}
             </button>
           </div>

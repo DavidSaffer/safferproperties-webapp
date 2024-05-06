@@ -15,12 +15,18 @@ function PropertiesPage() {
   const queryParams = new URLSearchParams(location.search);
   const filterAvailableParam = queryParams.get('filter');
 
-  const filterAvailableFromStorage = sessionStorage.getItem('filterAvailable') === 'true';
-  const selectedPropertyTypeFromStorage = sessionStorage.getItem('selectedPropertyType') || '';
+  const filterAvailableFromStorage =
+    sessionStorage.getItem('filterAvailable') === 'true';
+  const selectedPropertyTypeFromStorage =
+    sessionStorage.getItem('selectedPropertyType') || '';
 
   const [properties, setProperties] = useState([]);
-  const [filterAvailable, setFilterAvailable] = useState(filterAvailableFromStorage);
-  const [selectedPropertyType, setSelectedPropertyType] = useState(selectedPropertyTypeFromStorage);
+  const [filterAvailable, setFilterAvailable] = useState(
+    filterAvailableFromStorage
+  );
+  const [selectedPropertyType, setSelectedPropertyType] = useState(
+    selectedPropertyTypeFromStorage
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const headerVariants = {
@@ -73,13 +79,18 @@ function PropertiesPage() {
   useEffect(() => {
     if (filterAvailableParam !== null) {
       setFilterAvailable(filterAvailableParam === 'available');
-      sessionStorage.setItem('filterAvailable', (filterAvailableParam === 'available').toString());
+      sessionStorage.setItem(
+        'filterAvailable',
+        (filterAvailableParam === 'available').toString()
+      );
       setSelectedPropertyType('');
       sessionStorage.setItem('selectedPropertyType', '');
     } else {
-      const filterAvailableFromStorage = sessionStorage.getItem('filterAvailable') === 'true';
+      const filterAvailableFromStorage =
+        sessionStorage.getItem('filterAvailable') === 'true';
       setFilterAvailable(filterAvailableFromStorage);
-      const propertyTypeFromStorage = sessionStorage.getItem('selectedPropertyType') || '';
+      const propertyTypeFromStorage =
+        sessionStorage.getItem('selectedPropertyType') || '';
       setSelectedPropertyType(propertyTypeFromStorage);
     }
   }, [filterAvailableParam]);
@@ -88,7 +99,10 @@ function PropertiesPage() {
     if (filterAvailable && !property.currently_available) {
       return false;
     }
-    if (selectedPropertyType && property.property_type !== selectedPropertyType) {
+    if (
+      selectedPropertyType &&
+      property.property_type !== selectedPropertyType
+    ) {
       return false;
     }
     return true;
@@ -111,18 +125,32 @@ function PropertiesPage() {
   return (
     <>
       <div className={styles.container}>
-        <motion.h1 className={styles.title} variants={headerVariants} initial="hidden" animate="visible">
+        <motion.h1
+          className={styles.title}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible">
           Properties
         </motion.h1>
-        <motion.div variants={headerVariants} initial="hidden" animate="visible">
+        <motion.div
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible">
           <div className={styles.filterSection}>
             <label>
-              <input type="checkbox" checked={filterAvailable} onChange={handleFilterChange} /> Only show available properties
+              <input
+                type="checkbox"
+                checked={filterAvailable}
+                onChange={handleFilterChange}
+              />{' '}
+              Only show available properties
             </label>
           </div>
           <div className={styles.filterSection}>
             <label>Property Type: &nbsp;</label>
-            <select value={selectedPropertyType} onChange={handlePropertyTypeChange}>
+            <select
+              value={selectedPropertyType}
+              onChange={handlePropertyTypeChange}>
               <option value="">All</option>
               <option value="Residential">Residential</option>
               <option value="Vacation">Vacation</option>
@@ -133,10 +161,22 @@ function PropertiesPage() {
         {isLoading ? (
           <div>Loading properties...</div>
         ) : (
-          <motion.ul layout variants={containerVariants} initial="hidden" animate="visible" className={styles.propertiesList}>
+          <motion.ul
+            layout
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className={styles.propertiesList}>
             {filteredProperties.map(property => (
-              <motion.li key={property.id} variants={itemVariants} whileHover={{ scale: 1.05 }} transition={{ duration: 0.02 }}>
-                <PropertyCard property={property} linkTo={`/properties/${property.id}`} />
+              <motion.li
+                key={property.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.02 }}>
+                <PropertyCard
+                  property={property}
+                  linkTo={`/properties/${property.id}`}
+                />
               </motion.li>
             ))}
           </motion.ul>

@@ -1,11 +1,11 @@
-const admin = require("firebase-admin")
+const admin = require('firebase-admin');
 
 admin.initializeApp({
-  credential: admin.credential.cert("./serviceAccountKey.json"),
-  databaseURL: "https://safferproperties-6bead-default-rtdb.firebaseio.com"
-})
+  credential: admin.credential.cert('./serviceAccountKey.json'),
+  databaseURL: 'https://safferproperties-6bead-default-rtdb.firebaseio.com',
+});
 
-const uid = ""
+const uid = '';
 
 return admin
   .auth()
@@ -13,6 +13,5 @@ return admin
   .then(() => {
     // The new custom claims will propagate to the user's ID token the
     // next time a new one is issued.
-    console.log(`Admin claim added to ${uid}`)
+    console.log(`Admin claim added to ${uid}`);
   });
-  

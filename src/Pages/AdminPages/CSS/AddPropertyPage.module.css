@@ -1,92 +1,91 @@
 /* General styles for the form container */
 .formContainer {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  }
-  
-  .formContainer h1 {
-    color: #333;
-    text-align: center;
-  }
-  
-  /* Style labels and inputs */
-  .formContainer label {
-    display: block;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .formContainer input[type="text"],
-  .formContainer input[type="number"],
-  .formContainer textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .formContainer textarea {
-    height: 100px;
-    resize: vertical; /* Allow vertical resizing, none to disable */
-  }
-  
-  /* Style the file input */
-  .formContainer input[type="file"] {
-    border: none;
-    margin-top: 4px;
-  }
-  
-  /* Styles for buttons */
-  .formContainer button {
-    padding: 10px 20px;
-    margin-right: 10px;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .formContainer button:hover {
-    background-color: #0056b3;
-  }
-  
-  .formContainer button:last-child {
-    background-color: #dc3545;
-  }
-  
-  .formContainer button:last-child:hover {
-    background-color: #c82333;
-  }
-  
-  /* Add spacing between form fields */
-  .formContainer label:not(:first-child) {
-    margin-top: 15px;
-  }
-  
+.formContainer h1 {
+  color: #333;
+  text-align: center;
+}
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border-left-color: #09f;
-    animation: spin 1s linear infinite;
-  }
-  
+/* Style labels and inputs */
+.formContainer label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+}
 
-  
+.formContainer input[type='text'],
+.formContainer input[type='number'],
+.formContainer textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.formContainer textarea {
+  height: 100px;
+  resize: vertical; /* Allow vertical resizing, none to disable */
+}
+
+/* Style the file input */
+.formContainer input[type='file'] {
+  border: none;
+  margin-top: 4px;
+}
+
+/* Styles for buttons */
+.formContainer button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formContainer button:hover {
+  background-color: #0056b3;
+}
+
+.formContainer button:last-child {
+  background-color: #dc3545;
+}
+
+.formContainer button:last-child:hover {
+  background-color: #c82333;
+}
+
+/* Add spacing between form fields */
+.formContainer label:not(:first-child) {
+  margin-top: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s linear infinite;
+}

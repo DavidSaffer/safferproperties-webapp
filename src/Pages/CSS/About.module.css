@@ -1,63 +1,64 @@
 .aboutContainer {
-    font-family: 'Arial', sans-serif;
-    margin: 0 auto;
-    max-width: 960px;
-    padding: 20px;
-    color: #333;
+  font-family: 'Arial', sans-serif;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  color: #333;
 }
 
 .header {
-    color: #2A4F96;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
-    text-align: center;
-    margin-bottom: 20px;
+  color: #2a4f96;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .subHeader {
-    color: #2A4F96;
-    margin-top: 20px;
+  color: #2a4f96;
+  margin-top: 20px;
 }
 
 .section {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .serviceSection {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .list {
-    list-style-type: none;
-    padding-left: 20px;
-    line-height: 1.6;
+  list-style-type: none;
+  padding-left: 20px;
+  line-height: 1.6;
 }
 
 .list li {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 .list li::before {
-    content: "✔";
-    color: #2A4F96;
-    padding-right: 8px;
+  content: '✔';
+  color: #2a4f96;
+  padding-right: 8px;
 }
 
 @media (max-width: 768px) {
-    .aboutContainer {
-        padding: 10px;
-    }
+  .aboutContainer {
+    padding: 10px;
+  }
 
-    .header, .subHeader {
-        text-align: center;
-    }
+  .header,
+  .subHeader {
+    text-align: center;
+  }
 }
 
 .aboutContent {
-    background-color: #f4f4f4;
-    
-    padding: 15px;
-    padding-top: 5px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #f4f4f4;
+
+  padding: 15px;
+  padding-top: 5px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

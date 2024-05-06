@@ -46,27 +46,43 @@ function RentalApplication() {
   };
 
   return (
-    <motion.div className={styles.container} initial="hidden" animate="visible" variants={containerVariants}>
+    <motion.div
+      className={styles.container}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}>
       <motion.h1 className={styles.title} variants={headerVariants}>
         How to Apply
       </motion.h1>
       <motion.div className={styles.textBlock}>
         <motion.p className={styles.instructions} variants={itemVariants}>
-          To apply for {address ? `the property at ${address}` : 'a rental'}, please follow the instructions below:
+          To apply for {address ? `the property at ${address}` : 'a rental'},
+          please follow the instructions below:
         </motion.p>
         <motion.ol>
           <motion.li variants={itemVariants}>
-            Download the {address ? `application form for ${address}` : 'rental application form'} by clicking{' '}
+            Download the{' '}
+            {address
+              ? `application form for ${address}`
+              : 'rental application form'}{' '}
+            by clicking{' '}
             <a className={styles.link} href={rentalApp} download>
               here
             </a>
             .
           </motion.li>
-          <motion.li variants={itemVariants}>Fill out the application form with accurate information.</motion.li>
-          <motion.li variants={itemVariants}>Submit the completed form to the landlord or property manager.</motion.li>
+          <motion.li variants={itemVariants}>
+            Fill out the application form with accurate information.
+          </motion.li>
+          <motion.li variants={itemVariants}>
+            Submit the completed form to the landlord or property manager.
+          </motion.li>
         </motion.ol>
         {address && (
-          <motion.button className={styles.returnButton} onClick={() => navigate(-1)} variants={itemVariants}>
+          <motion.button
+            className={styles.returnButton}
+            onClick={() => navigate(-1)}
+            variants={itemVariants}>
             Return to {address}
           </motion.button>
         )}

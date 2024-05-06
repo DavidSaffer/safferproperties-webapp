@@ -4,8 +4,12 @@ import styles from './CSS/PropertyCard.module.css'; // Ensure you have correspon
 
 function PropertyCard({ property, linkTo }) {
   const getRoomInfo = () => {
-    const bedroomsInfo = property.bedrooms ? `${property.bedrooms} Bedrooms` : '';
-    const bathroomsInfo = property.bathrooms ? `${property.bathrooms} Bathrooms` : '';
+    const bedroomsInfo = property.bedrooms
+      ? `${property.bedrooms} Bedrooms`
+      : '';
+    const bathroomsInfo = property.bathrooms
+      ? `${property.bathrooms} Bathrooms`
+      : '';
     const separator = property.bedrooms && property.bathrooms ? ' | ' : '';
 
     return `${bedroomsInfo}${separator}${bathroomsInfo}` || '';

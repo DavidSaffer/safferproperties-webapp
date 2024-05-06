@@ -58,8 +58,7 @@ const ImageReorderComponent = () => {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
+        onDragEnd={handleDragEnd}>
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {items.map(src => (
             <SortableItem key={src} id={src} src={src} />

@@ -43,7 +43,11 @@ const Contact = () => {
 
   return (
     <div className={styles.contactContainer}>
-      <motion.h1 className={styles.header} variants={headerVariants} initial="hidden" animate="visible">
+      <motion.h1
+        className={styles.header}
+        variants={headerVariants}
+        initial="hidden"
+        animate="visible">
         Contact Us
       </motion.h1>
       <motion.div

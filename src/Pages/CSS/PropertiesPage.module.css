@@ -1,48 +1,45 @@
 /* PropertiesPage.module.css */
 
 .container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-    color: #2A4F96;
-    border-bottom: 2px solid #ccc;
-    padding-bottom: 10px;
-    text-align: center;
+  color: #2a4f96;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .propertiesList {
-    list-style-type: none;
-    padding: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 20px;
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 20px;
 }
 
 .propertiesList li {
-    height: 100%;
+  height: 100%;
 
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .propertiesList li:hover {
-    transform: translateY(-5px);
-
+  transform: translateY(-5px);
 }
-
 
 .filterSection {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
-
 .labelWithSpace:after {
-    content: " ";
-  }
+  content: ' ';
+}

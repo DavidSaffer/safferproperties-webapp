@@ -9,13 +9,13 @@ import styles from './CSS/PropertiesPage.module.css';
 import { motion } from 'framer-motion';
 
 function ConstructionPage() {
-
   const [properties, setProperties] = useState([]);
   const [selectedPropertyType, setSelectedPropertyType] = useState('');
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const filterPropertyTypeFromStorage = sessionStorage.getItem('constructionSelectedPropertyType') || '';
+  const filterPropertyTypeFromStorage =
+    sessionStorage.getItem('constructionSelectedPropertyType') || '';
 
   const headerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -68,9 +68,11 @@ function ConstructionPage() {
     setSelectedPropertyType(filterPropertyTypeFromStorage);
   }, [filterPropertyTypeFromStorage]);
 
-
   const filteredProperties = properties.filter(property => {
-    if (selectedPropertyType && property.property_type !== selectedPropertyType) {
+    if (
+      selectedPropertyType &&
+      property.property_type !== selectedPropertyType
+    ) {
       return false;
     }
     return true;
@@ -78,19 +80,31 @@ function ConstructionPage() {
 
   const handlePropertyTypeChange = event => {
     setSelectedPropertyType(event.target.value);
-    sessionStorage.setItem('constructionSelectedPropertyType', event.target.value);
+    sessionStorage.setItem(
+      'constructionSelectedPropertyType',
+      event.target.value
+    );
   };
 
   return (
     <>
       <div className={styles.container}>
-        <motion.h1 className={styles.title} variants={headerVariants} initial="hidden" animate="visible">
+        <motion.h1
+          className={styles.title}
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible">
           New Construction
         </motion.h1>
-        <motion.div variants={headerVariants} initial="hidden" animate="visible">
+        <motion.div
+          variants={headerVariants}
+          initial="hidden"
+          animate="visible">
           <div className={styles.filterSection}>
             <label>Construction Type: &nbsp;</label>
-            <select value={selectedPropertyType} onChange={handlePropertyTypeChange}>
+            <select
+              value={selectedPropertyType}
+              onChange={handlePropertyTypeChange}>
               <option value="">All</option>
               <option value="Residential">Residential</option>
               <option value="Vacation">Vacation</option>
@@ -101,10 +115,22 @@ function ConstructionPage() {
         {isLoading ? (
           <div>Loading properties...</div>
         ) : (
-          <motion.ul layout variants={containerVariants} initial="hidden" animate="visible" className={styles.propertiesList}>
+          <motion.ul
+            layout
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className={styles.propertiesList}>
             {filteredProperties.map(property => (
-              <motion.li key={property.id} variants={itemVariants} whileHover={{ scale: 1.05 }} transition={{ duration: 0.02 }}>
-                <PropertyCard property={property} linkTo={`/new-construction/${property.id}`} />
+              <motion.li
+                key={property.id}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.02 }}>
+                <PropertyCard
+                  property={property}
+                  linkTo={`/new-construction/${property.id}`}
+                />
               </motion.li>
             ))}
           </motion.ul>

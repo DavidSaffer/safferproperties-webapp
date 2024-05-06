@@ -44,13 +44,30 @@ function App() {
             <Route path="/rental-application" element={<RentalApplication />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
-            <Route path="/new-construction/:id" element={<ConstructionDetails />} />
+            <Route
+              path="/new-construction/:id"
+              element={<ConstructionDetails />}
+            />
             {isAdmin && <Route path="/addproperty" element={<AddProperty />} />}
             {/* {isAdmin && <Route path="/editproperties" element={<EditProperties />} />} */}
-            {isAdmin && <Route path="/addnewconstruction" element={<AddNewConstruction />} />}
-            {isAdmin && <Route path="/editproperties/:id" element={<EditPropertyDetails />} />}
-            {isAdmin && <Route path="/edit-construction/:id" element={<EditConstructionDetails />} />}
-
+            {isAdmin && (
+              <Route
+                path="/addnewconstruction"
+                element={<AddNewConstruction />}
+              />
+            )}
+            {isAdmin && (
+              <Route
+                path="/editproperties/:id"
+                element={<EditPropertyDetails />}
+              />
+            )}
+            {isAdmin && (
+              <Route
+                path="/edit-construction/:id"
+                element={<EditConstructionDetails />}
+              />
+            )}
           </Routes>
         </Router>
       </div>

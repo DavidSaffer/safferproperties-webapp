@@ -7,7 +7,7 @@
 }
 
 .title {
-  color: #2A4F96;
+  color: #2a4f96;
   border-bottom: 2px solid #ccc;
   padding-bottom: 10px;
   text-align: center;
@@ -18,10 +18,12 @@
   background-color: #f4f4f4;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.instructions, ol, button {
+.instructions,
+ol,
+button {
   margin-bottom: 10px;
 }
 
@@ -30,7 +32,8 @@
   font-weight: bold;
 }
 
-.link:hover, .returnButton:hover {
+.link:hover,
+.returnButton:hover {
   text-decoration: underline;
 }
 
