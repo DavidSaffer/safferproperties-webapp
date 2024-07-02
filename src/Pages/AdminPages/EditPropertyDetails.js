@@ -45,6 +45,7 @@ function EditPropertyDetails() {
     image_urls: [],
     bedrooms: '',
     bathrooms: '',
+    reserve_url: '',
   });
   const { id } = useParams();
   const textareaRef = useRef(null);
@@ -80,6 +81,7 @@ function EditPropertyDetails() {
             image_urls: data.image_urls || [],
             bedrooms: data.bedrooms || '',
             bathrooms: data.bathrooms || '',
+            reserve_url: data.reserve_url || '',
           });
         } else {
           console.log('No data available');
@@ -452,6 +454,21 @@ function EditPropertyDetails() {
             <option value="Commercial">Commercial</option>
             <option value="Vacation">Vacation</option>
           </select>
+
+          {formData.property_type === 'Vacation' && (
+            <div>
+              <label htmlFor="reserve_url" className={styles.label}>
+                Reservation URL:
+              </label>
+              <input
+                type="text"
+                name="reserve_url"
+                value={formData.reserve_url}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </div>
+          )}
 
           <label htmlFor="thumbnail_description" className={styles.label}>
             Thumbnail Description:

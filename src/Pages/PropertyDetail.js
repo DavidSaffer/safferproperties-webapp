@@ -231,13 +231,22 @@ function PropertyDetail() {
             Status:{' '}
             {property.currently_available ? 'Available' : 'Not Available'}
           </p>
-          {property.currently_available && ( // Check if property is available
-            <Link
-              to={`/rental-application?address=${encodeURIComponent(property.address)}`}
-              className={styles.applyButton}>
-              Apply Now
-            </Link>
-          )}
+          {property.currently_available &&
+            (property.property_type === 'Vacation' ? (
+              <a
+                href={`${property.reserve_url}`}
+                target="_blank" // Opens the link in a new tab
+                className={styles.applyButton}
+                rel="noopener noreferrer">
+                Reserve
+              </a>
+            ) : (
+              <Link
+                to={`/rental-application?address=${encodeURIComponent(property.address)}`}
+                className={styles.applyButton}>
+                Apply Now
+              </Link>
+            ))}
 
           {isAdmin && (
             <>
