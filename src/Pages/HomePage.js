@@ -22,11 +22,7 @@ function HomePage() {
         propertyList.push({ id, ...data[id] });
       }
       // Names of the properties you want to feature
-      const featuredNames = [
-        '1111 Karens Way Corolla, NC',
-        '3171 Spring Street Fairfax, VA ',
-        '3415 N. Pershing Drive',
-      ];
+      const featuredNames = ['2811 Old Lee Highway Fairfax, VA '];
 
       // Filter properties by names listed in featuredNames
       const featuredProperties = propertyList.filter(property =>
