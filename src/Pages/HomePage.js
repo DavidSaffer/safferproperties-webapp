@@ -1,40 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../index.js';
 import { Link } from 'react-router-dom';
-
 import PropertyCard from '../components/PropertyCard';
 import logo from '../Assets/logo6.png';
-
 import styles from './CSS/HomePage.module.css';
-
 import { motion } from 'framer-motion';
 
 function HomePage() {
-  const [properties, setProperties] = useState([]);
+  const [featured, setFeatured] = useState([]);
+
+  // keep latest snapshots in refs so either listener can recompute
+  const propsRefData = useRef(null);
+  const newConstRefData = useRef(null);
 
   useEffect(() => {
-    const propertiesRef = ref(database, 'properties/');
-    onValue(propertiesRef, snapshot => {
-      const data = snapshot.val();
-      const propertyList = [];
-      for (let id in data) {
-        propertyList.push({ id, ...data[id] });
-      }
-      // Names of the properties you want to feature
-      const featuredNames = [
-        '2811 Old Lee Highway Fairfax, VA ',
-        '3131 Draper Drive Fairfax, VA ',
+    const propertiesRef = ref(database, 'properties');
+    const newConstructionRef = ref(database, 'newConstruction');
+
+    const featuredNames = [
+      '3233 4th Street N',
+      '409 N Jackson Street',
+      '3131 Draper Drive Fairfax, VA ',
+    ];
+
+    const normalize = (node, source) => {
+      if (!node) return [];
+      return Object.entries(node).map(([id, val]) => ({
+        id,
+        source, // "properties" | "newConstruction"
+        ...val,
+      }));
+    };
+
+    const recompute = () => {
+      const list = [
+        ...normalize(propsRefData.current, 'properties'),
+        ...normalize(newConstRefData.current, 'newConstruction'),
       ];
 
-      // Filter properties by names listed in featuredNames
-      const featuredProperties = propertyList.filter(property =>
-        featuredNames.includes(property.address)
+      // Filter by your featured names (matching on address)
+      const featuredItems = list.filter(item =>
+        featuredNames.includes(item.address)
       );
 
-      // Set featured properties to state
-      setProperties(featuredProperties);
+      setFeatured(featuredItems);
+    };
+
+    const unsubProps = onValue(propertiesRef, snap => {
+      propsRefData.current = snap.val() || null;
+      recompute();
     });
+
+    const unsubNewConst = onValue(newConstructionRef, snap => {
+      newConstRefData.current = snap.val() || null;
+      recompute();
+    });
+
+    return () => {
+      unsubProps();
+      unsubNewConst();
+    };
   }, []);
 
   const containerVariants = {
@@ -65,31 +91,36 @@ function HomePage() {
           </button>
         </Link>
       </div>
+
       <div className={styles.featureSection}>
         <h2>Featured Properties</h2>
         <div className={styles.propertiesList}>
-          {properties.map(property => (
-            <motion.li
-              key={property.id}
-              className={styles.propertyCard}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                transition: {
-                  delay: 0.5 + properties.indexOf(property) * 0.2,
-                  type: 'spring',
-                  stiffness: 50,
-                },
-              }}
-              whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
-              <PropertyCard
-                key={property.id}
-                property={property}
-                linkTo={`/properties/${property.id}`}
-              />
-            </motion.li>
-          ))}
+          {featured.map((item, idx) => {
+            // choose the detail route based on source
+            const linkTo =
+              item.source === 'newConstruction'
+                ? `/new-construction/${item.id}`
+                : `/properties/${item.id}`;
+
+            return (
+              <motion.li
+                key={`${item.source}:${item.id}`}
+                className={styles.propertyCard}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  transition: {
+                    delay: 0.5 + idx * 0.2,
+                    type: 'spring',
+                    stiffness: 50,
+                  },
+                }}
+                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}>
+                <PropertyCard property={item} linkTo={linkTo} />
+              </motion.li>
+            );
+          })}
         </div>
       </div>
     </motion.div>
