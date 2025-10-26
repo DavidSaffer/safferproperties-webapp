@@ -21,7 +21,7 @@ function HomePage() {
     const featuredNames = [
       '3233 4th Street N',
       '409 N Jackson Street',
-      '3131 Draper Drive Fairfax, VA ',
+      '2811 Old Lee Highway Fairfax, VA ',
     ];
 
     const normalize = (node, source) => {
