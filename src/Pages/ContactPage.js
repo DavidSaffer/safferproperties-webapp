@@ -92,7 +92,7 @@ const Contact = () => {
           variants={itemVariants} // Same item variants applied here
         >
           <h2>Stephanie Saffer</h2>
-          <p className={styles.title}>Property Manager</p>
+          <p className={styles.title}>Property Manager / Sales & Leasing</p>
           <p>
             Email:{' '}
             <a href="mailto:stephaniesaffer@vt.edu" className={styles.email}>

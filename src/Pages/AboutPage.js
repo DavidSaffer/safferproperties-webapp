@@ -33,7 +33,7 @@ const About = () => {
           whileInView="visible"
           viewport={{ once: true }}>
           <p>
-            Saffer Properties, LLC, founded in 2017, is a family-owned and
+            Saffer Properties, LLC, founded in 2005, is a family-owned and
             operated company serving the Northern Virginia region for over 30
             years. Our managed properties include 16 single-family homes in
             North Arlington, five commercial buildings in Fairfax, and two
