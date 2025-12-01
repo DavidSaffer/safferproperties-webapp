@@ -95,8 +95,8 @@ const Contact = () => {
           <p className={styles.title}>Property Manager / Sales & Leasing</p>
           <p>
             Email:{' '}
-            <a href="mailto:stephaniesaffer@vt.edu" className={styles.email}>
-              stephaniesaffer@vt.edu
+            <a href="mailto:stephaniesaffer@gmail.com" className={styles.email}>
+              stephaniesaffer@gmail.com
             </a>
           </p>
           <p>
